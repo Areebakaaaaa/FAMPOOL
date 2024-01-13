@@ -2,8 +2,10 @@ import react, {useState} from 'react';
 import {View, Text, Touchable, TouchableOpacity} from 'react-native';
 import { TextInput, Button, Picker, CheckBox } from 'react-native';
 import { StyleSheet} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 export default Registration = () => {
+    const navigation = useNavigation();
 
     const [UserType, setUserType] = useState('');
     const [NuId, setNuId] = useState('');
@@ -17,6 +19,13 @@ export default Registration = () => {
     const RegistrationProcess = () =>
     {
         console.log("Register button clicked succefully, Entered registration process");
+        navigation.navigate("HomePage");
+    }
+
+    const abc = () =>
+    {
+        console.log("Register button clicked succefully, Entered registration process");
+        navigation.navigate("Login");
     }
 
     return (
@@ -59,6 +68,12 @@ export default Registration = () => {
 
             <View style={styles.register_button_layout}>
                 <Button style={styles.register_button} title="Register" onPress={RegistrationProcess} />
+            </View>
+
+            <View>
+            <TouchableOpacity onPress={abc}>
+            <Text style={{fontWeight: 'bold', fontSize: 16 }}>Already have an account? Click me</Text>
+            </TouchableOpacity>
             </View>
 
 
