@@ -3,6 +3,7 @@ import {View, Text, Touchable, TouchableOpacity} from 'react-native';
 import { TextInput, Button, Picker, CheckBox } from 'react-native';
 import { StyleSheet} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { addUser } from '../services/fampoolAPIs';
 
 export default Registration = () => {
     const navigation = useNavigation();
@@ -19,6 +20,7 @@ export default Registration = () => {
     const RegistrationProcess = () =>
     {
         console.log("Register button clicked succefully, Entered registration process");
+        addUser('abc');
         navigation.navigate("HomePage");
     }
 
