@@ -136,6 +136,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { addUser } from '../services/fampoolAPIs';
 import { Picker } from '@react-native-picker/picker';
 
 export default Registration = () => {
