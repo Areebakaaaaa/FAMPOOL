@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { addUser } from '../services/fampoolAPIs';
@@ -19,6 +19,9 @@ export default Registration = () => {
     const [gender, setGender] = useState('');
     const [imageUri, setImageUri] = useState(null);
 
+    const [emailError, setEmailError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
+
     let userDetails={
         fname: fname,
         lname: lname,
@@ -30,11 +33,50 @@ export default Registration = () => {
         gender: gender,
     }
 
+    useEffect(()=>{
+        if(nuEmail.length>8 && !nuEmail.endsWith('@nu.edu.pk'))
+    {
+        setEmailError("Please use NU-Email => 'K123456@nu.edu.pk'");
+    }else{
+        setEmailError('');
+    }
+
+     if(rePassword.length>0 && password!=rePassword)
+    {
+        setPasswordError("Incorrect Password");
+    }else{
+        setPasswordError('');
+    }
+    })
+
     const RegistrationProcess = async () => {
         try{
-            console.log("Register button clicked successfully, Entered registration process");
-            //const data = await addUser(userDetails);
-            //navigation.navigate("HomePage");
+            console.log("Register button clicked successfully");
+            if(!fname || !lname || nuId.length!=7 || !userType || nuEmail.length!=17 || !phone || password.length<7 || !gender || password!=rePassword) //to check that no field is left empty
+            {
+                if(nuEmail.length!=17 && !nuEmail.endsWith('@nu.edu.pk'))
+                {
+                    alert("Incorrect email. Please use NU-Email.");
+                    return;
+                }else if(password!=rePassword || password.length<8)
+                {
+                    alert("Incorrect Password");
+                    return;
+                }else if(nuId.length!=7)
+                {
+                    alert("Incorrect Nu-ID. Please enter correct NU-ID.");
+                    return;
+                }else{
+                    alert("Please fill all the fields correctly");
+                    return;
+                }
+                
+            }else{
+                console.log("Entered registration process");
+                //console.log(nuEmail.length);
+                //const data = await addUser(userDetails);
+                //navigation.navigate("HomePage");
+            }
         }
         catch(error)
         {
@@ -84,14 +126,19 @@ export default Registration = () => {
                     <Picker.Item label="Faculty" value="Faculty" />
                 </Picker>
 
-                <TextInput style={styles.inputField} placeholder='NU-ID' onChangeText={setNuId} />
+                <TextInput style={styles.inputField} placeholder='NU-ID (KXXXXXX)' onChangeText={setNuId} />
+
                 <TextInput style={styles.inputField} placeholder='NU-Email' onChangeText={setNuEmail} />
+                {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
+
+
                 <TextInput style={styles.inputField} placeholder='First Name' onChangeText={setFname} />
                 <TextInput style={styles.inputField} placeholder='Last Name' onChangeText={setLname} />
                 <TextInput style={styles.inputField} placeholder='Phone' onChangeText={setPhone} />
                 <TextInput style={styles.inputField} placeholder='Gender' onChangeText={setGender} />
                 <TextInput style={styles.inputField} placeholder='Password' onChangeText={setPassword} secureTextEntry={true} />
                 <TextInput style={styles.inputField} placeholder='Re-Enter Password' onChangeText={setRePassword} secureTextEntry={true} />
+                {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
 
                 <TouchableOpacity style={styles.checkboxContainer}>
                     <Text style={styles.termsText}>Accept Terms & Conditions</Text>
@@ -197,4 +244,9 @@ const styles = StyleSheet.create({
         textDecorationLine: 'underline',
         marginLeft: 5,
     },
+    errorText: {
+        color: 'red',
+        fontSize: 14,
+        marginBottom: 10,
+    }
 });
