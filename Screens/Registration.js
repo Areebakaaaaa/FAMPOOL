@@ -7,20 +7,38 @@ import { Picker } from '@react-native-picker/picker';
 export default Registration = () => {
     const navigation = useNavigation();
 
-    const [UserType, setUserType] = useState('Student');
-    const [NuId, setNuId] = useState('');
-    const [NuEmail, setNuEmail] = useState('');
-    const [Name, setName] = useState('');
-    const [Phone, setPhone] = useState('');
-    const [Password, setPassword] = useState('');
-    const [RePassword, setRePassword] = useState('');
-    const [Gender, setGender] = useState('');
+    const [userType, setUserType] = useState('Student');
+    const [nuId, setNuId] = useState('');
+    const [nuEmail, setNuEmail] = useState('');
+    const [fname, setFname] = useState('');
+    const [lname, setLname] = useState('');
+    const [phone, setPhone] = useState('');
+    const [password, setPassword] = useState('');
+    const [rePassword, setRePassword] = useState('');
+    const [gender, setGender] = useState('');
 
-    const RegistrationProcess = () => {
-        console.log("Register button clicked successfully, Entered registration process");
-        addUser("Network Error Solved");
-        navigation.navigate("HomePage");
+    let userDetails={
+        fname: fname,
+        lname: lname,
+        nuId: nuId,
+        userType: userType,
+        nuEmail: nuEmail,
+        phone: phone,
+        password: password,
+        gender: gender,
     }
+
+    const RegistrationProcess = async () => {
+        try{
+            console.log("Register button clicked successfully, Entered registration process");
+            const data = await addUser(userDetails);
+            navigation.navigate("HomePage");
+        }
+        catch(error)
+        {
+            console.log("Registration Error");
+        }
+
 
     const goToLogin = () => {
         navigation.navigate("Login");
@@ -34,7 +52,7 @@ export default Registration = () => {
             <View style={styles.formContainer}>
                 <Text style={styles.label}>User-Type</Text>
                 <Picker
-                    selectedValue={UserType}
+                    selectedValue={userType}
                     onValueChange={(itemValue, itemIndex) => setUserType(itemValue)}
                     style={styles.picker}
                 >
@@ -44,7 +62,8 @@ export default Registration = () => {
 
                 <TextInput style={styles.inputField} placeholder='NU-ID' onChangeText={setNuId} />
                 <TextInput style={styles.inputField} placeholder='NU-Email' onChangeText={setNuEmail} />
-                <TextInput style={styles.inputField} placeholder='Name' onChangeText={setName} />
+                <TextInput style={styles.inputField} placeholder='First Name' onChangeText={setFname} />
+                <TextInput style={styles.inputField} placeholder='Last Name' onChangeText={setLname} />
                 <TextInput style={styles.inputField} placeholder='Phone' onChangeText={setPhone} />
                 <TextInput style={styles.inputField} placeholder='Gender' onChangeText={setGender} />
                 <TextInput style={styles.inputField} placeholder='Password' onChangeText={setPassword} secureTextEntry={true} />
