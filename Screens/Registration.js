@@ -19,7 +19,7 @@ export default Registration = () => {
     const RegistrationProcess = async () => {
         try{
             console.log("Register button clicked successfully, Entered registration process");
-            const data = await addUser("Areeba");
+            const data = await addUser(Name);
             navigation.navigate("HomePage");
         }
         catch(error)

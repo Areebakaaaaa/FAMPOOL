@@ -1,15 +1,16 @@
-import axios from 'axios'
+import axios from 'axios';
 
 export const addUser = async (name) => {
     try{
         console.log("Name passed: ",name);
-        const res = await axios.post('http://localhost:5000/users/add-user', {
+        console.log("Before API");
+        const res = await axios.post('http://192.168.156.69:5000/users/add-user', {
             name: name
         })
-        console.log(res)
+        console.log("After API");
 
     }catch(err){
-        console.log(err)
+        console.log(JSON.stringify(err,null,2));
     }
 }
 
