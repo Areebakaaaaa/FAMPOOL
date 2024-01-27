@@ -38,7 +38,7 @@ export default Registration = () => {
         {
             console.log("Registration Error");
         }
-    }
+
 
     const goToLogin = () => {
         navigation.navigate("Login");
