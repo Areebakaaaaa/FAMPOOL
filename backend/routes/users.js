@@ -8,7 +8,8 @@ router.get('/get-user', function(req, res, next) {
 });
 
 router.post('/add-user', (req, res, next) => {
-  addUser(req.body);
+  let userDetails = req.body;
+  addUser(userDetails);
   
   res.send('hello')
 })
