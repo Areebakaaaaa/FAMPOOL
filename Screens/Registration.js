@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 
 import { useNavigation } from '@react-navigation/native';
 import { addUser } from '../services/fampoolAPIs';
 import { Picker } from '@react-native-picker/picker';
+import * as ImagePicker from 'expo-image-picker';
 
 export default Registration = () => {
     const navigation = useNavigation();
@@ -16,6 +17,7 @@ export default Registration = () => {
     const [password, setPassword] = useState('');
     const [rePassword, setRePassword] = useState('');
     const [gender, setGender] = useState('');
+    const [imageUri, setImageUri] = useState(null);
 
     let userDetails={
         fname: fname,
@@ -31,18 +33,36 @@ export default Registration = () => {
     const RegistrationProcess = async () => {
         try{
             console.log("Register button clicked successfully, Entered registration process");
-            const data = await addUser(userDetails);
-            navigation.navigate("HomePage");
+            //const data = await addUser(userDetails);
+            //navigation.navigate("HomePage");
         }
         catch(error)
         {
             console.log("Registration Error");
         }
+    }
 
 
     const goToLogin = () => {
         navigation.navigate("Login");
     }
+
+    const selectImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.Images,
+          allowsEditing: true,
+          aspect: [4, 3],
+          quality: 1,
+        });
+      
+        console.log(result);
+      
+        if (!result.canceled) {
+          setImageUri(result.uri);
+          //{imageUri && <Image source={{ uri: imageUri }} style={{ width: 200, height: 200 }} />}
+
+        }
+      };
 
     return (
         <ScrollView style={styles.container}>
@@ -50,6 +70,10 @@ export default Registration = () => {
                 <Text style={styles.heading}>Registration</Text>
             </View>
             <View style={styles.formContainer}>
+                <TouchableOpacity style={styles.registerButton} onPress={selectImage}>
+                    <Text style={styles.registerButtonText}>Select Profile Picture</Text>
+                </TouchableOpacity>
+
                 <Text style={styles.label}>User-Type</Text>
                 <Picker
                     selectedValue={userType}
