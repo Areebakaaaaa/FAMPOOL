@@ -49,18 +49,6 @@ export default Registration = () => {
     }
     })
 
-    /* const RegistrationProcess = async () => {
-        try{
-            console.log("Register button clicked successfully");
-            if(!fname || !lname || nuId.length!=7 || !userType || nuEmail.length!=17 || !phone || password.length<7 || !gender || password!=rePassword) //to check that no field is left empty
-            {if(nuEmail.length!=17 && !nuEmail.endsWith('@nu.edu.pk'))
-                {alert("Incorrect email. Please use NU-Email.");return;}else if(password!=rePassword || password.length<8)
-                {alert("Incorrect Password");return;}else if(nuId.length!=7)
-                {alert("Incorrect Nu-ID. Please enter correct NU-ID.");return;}else{alert("Please fill all the fields correctly");return;}}else{
-                console.log("Entered registration process");
-                //console.log(nuEmail.length);//const data = await addUser(userDetails);//navigation.navigate("HomePage");
-            }}catch(error){console.log("Registration Error");}} */
-
             const RegistrationProcess = async () => {
                 try {
                     console.log("Register button clicked successfully");
