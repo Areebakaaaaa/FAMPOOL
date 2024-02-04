@@ -93,15 +93,13 @@ export default Registration = () => {
                     }else {
                         console.log("Entered registration process");
                         const data = await addUser(userDetails);
-                        navigation.navigate("HomePage");
+                        navigation.navigate("Login");
                     }
                 } catch (error) {
                     console.log("Registration Error");
                 }
             };
             
-
-
     const goToLogin = () => {
         navigation.navigate("Login");
     }
