@@ -49,40 +49,57 @@ export default Registration = () => {
     }
     })
 
-    const RegistrationProcess = async () => {
+    /* const RegistrationProcess = async () => {
         try{
             console.log("Register button clicked successfully");
             if(!fname || !lname || nuId.length!=7 || !userType || nuEmail.length!=17 || !phone || password.length<7 || !gender || password!=rePassword) //to check that no field is left empty
-            {
-                if(nuEmail.length!=17 && !nuEmail.endsWith('@nu.edu.pk'))
-                {
-                    alert("Incorrect email. Please use NU-Email.");
-                    return;
-                }else if(password!=rePassword || password.length<8)
-                {
-                    alert("Incorrect Password");
-                    return;
-                }else if(nuId.length!=7)
-                {
-                    alert("Incorrect Nu-ID. Please enter correct NU-ID.");
-                    return;
-                }else{
-                    alert("Please fill all the fields correctly");
-                    return;
-                }
-                
-            }else{
+            {if(nuEmail.length!=17 && !nuEmail.endsWith('@nu.edu.pk'))
+                {alert("Incorrect email. Please use NU-Email.");return;}else if(password!=rePassword || password.length<8)
+                {alert("Incorrect Password");return;}else if(nuId.length!=7)
+                {alert("Incorrect Nu-ID. Please enter correct NU-ID.");return;}else{alert("Please fill all the fields correctly");return;}}else{
                 console.log("Entered registration process");
-                //console.log(nuEmail.length);
-                //const data = await addUser(userDetails);
-                //navigation.navigate("HomePage");
-            }
-        }
-        catch(error)
-        {
-            console.log("Registration Error");
-        }
-    }
+                //console.log(nuEmail.length);//const data = await addUser(userDetails);//navigation.navigate("HomePage");
+            }}catch(error){console.log("Registration Error");}} */
+
+            const RegistrationProcess = async () => {
+                try {
+                    console.log("Register button clicked successfully");
+                    const rollNumberRegex = /^[kKlL]\d{6}$/; // Regex for validating roll number
+                    //const phoneRegex = /^\d+$/; // Regex for validating phone number
+                    const phoneRegex = /^\d{11}$/;
+            
+                    if (!fname ||!lname || !rollNumberRegex.test(nuId) || !userType ||nuEmail.length !== 17 ||!phoneRegex.test(phone) ||
+                        password.length < 8 ||!gender ||password !== rePassword) 
+                    {
+                        if (!rollNumberRegex.test(nuId)) 
+                        {
+                            alert("Incorrect NU-ID. \nNU-ID format-> K123456.");
+                            return;
+                        } else if (password !== rePassword || password.length < 8) {
+                            alert("Password should be at least 8 characters long and must match.");
+                            return;
+                        } else if (nuEmail.length !== 17 || !nuEmail.endsWith('@nu.edu.pk')) 
+                        {
+                            alert("Incorrect email. Please use NU-Email.");
+                            return;
+                        }else if (nuEmail.slice(1, 7) !== nuId.slice(1, 7) || nuEmail.slice(0,1)== /^[kK]$/) 
+                        {
+                            alert("Nu-Email should match your NU-ID.");
+                            return;
+                        } else if (!phoneRegex.test(phone)) {
+                            alert("Phone number should be 11 character numeric ONLY.");
+                            return;
+                        }//else{alert("Please fill all the fields correctly");return;}
+                    }else {
+                        console.log("Entered registration process");
+                        const data = await addUser(userDetails);
+                        navigation.navigate("HomePage");
+                    }
+                } catch (error) {
+                    console.log("Registration Error");
+                }
+            };
+            
 
 
     const goToLogin = () => {
@@ -126,14 +143,14 @@ export default Registration = () => {
                     <Picker.Item label="Faculty" value="Faculty" />
                 </Picker>
 
-                <TextInput style={styles.inputField} placeholder='NU-ID (KXXXXXX)' onChangeText={setNuId} />
+                
+                <TextInput style={styles.inputField} placeholder='First Name' onChangeText={setFname} />
+                <TextInput style={styles.inputField} placeholder='Last Name' onChangeText={setLname} />
 
+                <TextInput style={styles.inputField} placeholder='NU-ID (KXXXXXX)' onChangeText={setNuId} />
                 <TextInput style={styles.inputField} placeholder='NU-Email' onChangeText={setNuEmail} />
                 {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
 
-
-                <TextInput style={styles.inputField} placeholder='First Name' onChangeText={setFname} />
-                <TextInput style={styles.inputField} placeholder='Last Name' onChangeText={setLname} />
                 <TextInput style={styles.inputField} placeholder='Phone' onChangeText={setPhone} />
                 <TextInput style={styles.inputField} placeholder='Gender' onChangeText={setGender} />
                 <TextInput style={styles.inputField} placeholder='Password' onChangeText={setPassword} secureTextEntry={true} />
