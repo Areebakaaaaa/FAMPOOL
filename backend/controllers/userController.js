@@ -2,7 +2,7 @@
 // addUser, updateUser, deleteUser, displayUser 
 const { AdminFirestore } = require('../utils/db');
 
-async function addUser(userDetails) {
+  async function addUser(userDetails) {
     const usersCollection = AdminFirestore.collection('users');
     const dateTime = new Date();
     //console.log(dateTime);
@@ -42,6 +42,30 @@ async function addUser(userDetails) {
     }
   }
   
-  module.exports = addUser
+  async function verifyUser(loginDetails){
+  
+  const usersCollection = AdminFirestore.collection('users');
+  const nuEmail= loginDetails.nuEmail;
+  const password= loginDetails.password;
+
+  console.log("NuEmail: ", nuEmail);
+
+  try{
+    const snapshot = await usersCollection.where('nuEmail','==', nuEmail).where('password','==',password).get();
+    if(snapshot.empty){
+      console.log('No matching documents.');
+      return false;
+    }
+    else{
+      console.log('Match Found.');
+      return true;
+    }
+
+  }catch(err){
+    console.log(err);
+  }
+}
+
+  module.exports = ({addUser, verifyUser});
 
   

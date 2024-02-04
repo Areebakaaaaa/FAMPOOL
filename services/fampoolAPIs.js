@@ -12,4 +12,20 @@ export const addUser = async (userDetails) => {
     }
 }
 
+export const getUser = async (loginDetails) => {
+    try{
+        console.log("Login process API entered.");
+        console.log("NuID: ", loginDetails.nuEmail);
+        console.log("Password: ", loginDetails.password);
+        const res = await axios.post('http://192.168.100.14:5000/users/get-user', loginDetails);
+        console.log("Login API exit.");
+        return res.data;
+
+    }catch(err)
+    {
+        console.log(err);
+    }
+}
+
+
 
