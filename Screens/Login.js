@@ -1,126 +1,37 @@
-//version 1
-
-// import React from 'react';
-// import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-
-// const Login = (props) => {
-//   return (
-//     <View style={{ alignItems: 'center', width: 400 }}>
-//       <Text style={styles.loginText}>Login</Text>
-//       <View style={styles.loginContainer}>
-//         <Text style={styles.welcomeBackText}>Welcome Back</Text>
-//         <Text style={styles.loginToYourAccountText}>Login to your account</Text>
-//         <TextInput 
-//           style={styles.inputField} 
-//           placeholder="Email / Username" 
-//           keyboardType="email-address" 
-//           autoCapitalize="none" 
-//         />
-//         <TextInput 
-//           style={styles.inputField} 
-//           placeholder="Password" 
-//           secureTextEntry={true} 
-//         />
-//         <View style={styles.forgotPasswordContainer}>
-//           <TouchableOpacity onPress={() => alert("Forgot Password?")}>
-//             <Text style={styles.forgotPasswordText}>Forgot Password ?</Text>
-//           </TouchableOpacity>
-//         </View>
-//         <TouchableOpacity style={styles.loginButton} onPress={() => alert("Logged In")}>
-//           <Text style={styles.loginButtonText}>Login</Text>
-//         </TouchableOpacity>
-//         <View style={styles.signupContainer}>
-//           <Text style={styles.dontHaveAccountText}>Don't have an account ?</Text>
-//           <TouchableOpacity onPress={() => props.navigation.navigate("Registration")}>
-//             <Text style={styles.signupText}>Signup</Text>
-//           </TouchableOpacity>
-//         </View>
-//       </View>
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   loginText: {
-//     color: 'black',
-//     fontSize: 70,
-//     fontWeight: 'bold',
-//     marginVertical: 20,
-//   },
-//   loginContainer: {
-//     backgroundColor: '#90ee90',
-//     height: 700,
-//     width: 460,
-//     borderTopLeftRadius: 130,
-//     paddingTop: 100,
-//     alignItems: 'center',
-//   },
-//   welcomeBackText: {
-//     fontSize: 40,
-//     fontWeight: 'bold',
-//   },
-//   loginToYourAccountText: {
-//     color: 'grey',
-//     fontSize: 19,
-//     fontWeight: 'bold',
-//     marginBottom: 20,
-//   },
-//   inputField: {
-//     height: 50,
-//     width: '80%',
-//     borderColor: 'gray',
-//     borderWidth: 1,
-//     paddingLeft: 10,
-//     marginBottom: 10,
-//     borderRadius: 5,
-//   },
-//   forgotPasswordContainer: {
-//     alignItems: 'flex-end',
-//     width: '78%',
-//     paddingRight: 16,
-//     marginBottom: 200,
-//   },
-//   forgotPasswordText: {
-//     fontWeight: 'bold',
-//     fontSize: 16,
-//   },
-//   loginButton: {
-//     backgroundColor: 'blue',
-//     padding: 15,
-//     borderRadius: 5,
-//     marginBottom: 10,
-//   },
-//   loginButtonText: {
-//     color: 'white',
-//     fontSize: 16,
-//     fontWeight: 'bold',
-//   },
-//   signupContainer: {
-//     display: 'flex',
-//     flexDirection: 'row',
-//     justifyContent: "center",
-//   },
-//   dontHaveAccountText: {
-//     fontSize: 16,
-//     fontWeight: "bold",
-//   },
-//   signupText: {
-//     fontWeight: 'bold',
-//     fontSize: 16,
-//     color: 'blue',
-//   },
-// });
-
-// export default Login;
-
-//Version 2
-
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, StatusBar } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient'; // Make sure to install this
+import { getUser } from '../services/fampoolAPIs';
+import { useNavigation } from '@react-navigation/native';
 
 const Login = (props) => {
+  const navigation = useNavigation();
+
+  const [nuEmail, setNuEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  let loginDetails = {
+    nuEmail: nuEmail,
+    password: password,
+  }
+
+  const LoginProcess = async () => {
+    try{
+      const result = await getUser(loginDetails);
+      if(result){
+        navigation.navigate("HomePage");
+      }else{
+        alert("Incorrect Nu-Email or Password.");
+      }
+    }catch(err)
+    {
+      console.log(err);
+      alert("Login Failed!.");
+    }
+  }
+
+
   return (
     <LinearGradient colors={['#86ba90', '#5e8c61', '#2e5734']} style={styles.container}>
       <StatusBar barStyle="light-content" />
@@ -129,27 +40,20 @@ const Login = (props) => {
         <Text style={styles.loginText}>Login</Text>
         <View style={styles.inputContainer}>
           <Ionicons name="mail-outline" size={24} color="#fff" />
-          <TextInput 
-            style={styles.inputField} 
-            placeholder="Email / Username" 
-            placeholderTextColor="#ccc"
-            keyboardType="email-address" 
-            autoCapitalize="none" 
-          />
+          <TextInput style={styles.inputField} placeholder="NU-Email" placeholderTextColor="#ccc" onChangeText={setNuEmail}
+          keyboardType="email-address" autoCapitalize="none" />
         </View>
+
         <View style={styles.inputContainer}>
           <Ionicons name="key-outline" size={24} color="#fff" />
-          <TextInput 
-            style={styles.inputField} 
-            placeholder="Password" 
-            placeholderTextColor="#ccc"
-            secureTextEntry={true} 
-          />
+          <TextInput style={styles.inputField} placeholder="Password" placeholderTextColor="#ccc" onChangeText={setPassword}
+          secureTextEntry={true} />
         </View>
-        <TouchableOpacity style={styles.forgotPasswordContainer} onPress={() => alert("Forgot Password?")}>
+
+        <TouchableOpacity style={styles.forgotPasswordContainer} onPress={() => alert("Logged In")}>
           <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.loginButton} onPress={() => alert("Logged In")}>
+        <TouchableOpacity style={styles.loginButton} onPress={LoginProcess}>
           <Text style={styles.loginButtonText}>Login</Text>
         </TouchableOpacity>
         <View style={styles.signupPrompt}>

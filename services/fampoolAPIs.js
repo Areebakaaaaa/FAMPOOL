@@ -1,6 +1,6 @@
-import axios from 'axios'
+import axios from 'axios';
 
-export const addUser = async (name) => {
+export const addUser = async (userDetails) => {
     try{
         console.log("Before API");
         //console.log("Name: ", userDetails.name, "Rollno: ", userDetails.nuId);
@@ -8,7 +8,7 @@ export const addUser = async (name) => {
         console.log("After API");
 
     }catch(err){
-        console.log(err)
+        console.log(JSON.stringify(err,null,2));
     }
 }
 
