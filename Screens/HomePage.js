@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import MapView from 'react-native-maps';
 
 export default HomePage = () => {
     const navigation = useNavigation();
@@ -21,9 +22,14 @@ export default HomePage = () => {
                 <Text style={styles.buttonText}>Post a Ride</Text>
             </TouchableOpacity>
   
-        <TouchableOpacity style={styles.buttonBox} onPress={() => navigation.navigate("Notification")}>
-        <Text style={styles.buttonText}>Notification</Text>
-    </TouchableOpacity>
+            <TouchableOpacity style={styles.buttonBox} onPress={() => navigation.navigate("Notification")}>
+                <Text style={styles.buttonText}>Notification</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.buttonBox} onPress={() => navigation.navigate("MapScreen")}>
+                <Text style={styles.buttonText}>Map Screen</Text>
+            </TouchableOpacity>
+
 </View>
 
 
