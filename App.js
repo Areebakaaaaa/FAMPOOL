@@ -10,6 +10,7 @@ import HomePage from "./Screens/HomePage";
 import AvailableRide from "./Screens/AvailableRide";
 import PostRide from "./Screens/PostRide";
 import Notification from "./Screens/Notification";
+import MapScreen from './Screens/MapScreen';
 
 
 
@@ -48,6 +49,11 @@ export default function App() {
               name="Notification"
               component={Notification}
               options={{ title: 'Notification' , headerShown: false }}
+              />
+              <Stack.Screen
+              name="MapScreen"
+              component={MapScreen}
+              options={{ title: 'MapScreen' , headerShown: false }}
               />
       </Stack.Navigator>
     </NavigationContainer>
