@@ -17,7 +17,7 @@ const Login = (props) => {
   }
 
   const LoginProcess = async () => {
-    try{
+    /* try{
       const result = await getUser(loginDetails);
       if(result){
         navigation.navigate("HomePage");
@@ -28,7 +28,9 @@ const Login = (props) => {
     {
       console.log(err);
       alert("Login Failed!.");
-    }
+    } */
+    navigation.navigate("HomePage");
+
   }
 
 

@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "fampool-6de94",
+  "private_key_id": "8910be995be3547ab1b813156b6623ade5adfb1e",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCS2XN/duKV6Tsh\nqyCuL0WdbGe8zwmawF9SZCajohmBIxwRdFKbC+AZc93EFVsCbZMVNZecfawAL7Mn\nmnGB3VwQWpDOdE0dkZrBUNGg2AQwhw4whpFwXEgkZESNGPI9ycIudTG71fUYXwdl\nLhgdHNUX9jbOsEQudDLDakkp4AE74Y62LVtEpT6nRjzjzFu2zaXrdKH855gMLzyu\njCMYpImdPSArwmY81c8JNYjlCVpls0NBx8uN4FKPJAQCgoNXVBzaMUvVoV70KBNE\nChYB3AiiHEJVWhLv5J8c+p8ehvfUFDCtdIabP2rrecjNncSOnFYcVWwR9ErSiml5\n2C7/137vAgMBAAECggEAOurPshZKtobK2KlGBVyl+5Eg1dnjKpmAJRhVgFVrEiq5\n+i7HbbmIAe5AzYkb6I958Yp896ZcOf7pTDxkygu8Ajuz2YFD51ch1enNEVFZ7PZi\ntQlolMIRl7g64Llfh3bJV8ZhW9Ft8oc9+lRSDGwi+ugn+SkzUcgBDfI4xHpBRHqR\nBhcgQKhQ72nuANNBXg6DD2NeRABnZQmsFPzuc9iFVI2HbUDvWLJUDkVQWpXX21lV\nVbsRG0moTY+asB+j0hyVMBwKPPCXv1Q5yhn3Y0kmy2FO0W3Up3FIJtS8JLTB259C\nrGLv+UmjYiD4w2evYz2Ksu/GdfV+S7knwzzBF5IeoQKBgQDKFBmRyRaKRtFD62br\n0EBDplNWb6uB84IiyDCpeEAoHdHc1NW1SZVUSEQlCa/cXAdifoAQBx4XxpU01qK4\nuFSwoHtWUJRc3ILxXLiYtJ7IiUV+ByieTVPJ+8sOYsQlccirhPkA2UtEqHb4zBcF\n5XtP473KuXukl86CGBVVEKODaQKBgQC6CKyoyoLokJBqGJJHj6FBCDeTGTGdvqBu\n8phtpMOMlD7s2zH3mUFAReeb5gmw9xpWMFbzmkgktau5EruD9YwimDdtArc/CnZy\nZe2uKiAyexgh/4T9ff9rLkMvDBgfqkXF4wx4LvFluUMA4Jg5F6TK8Xm6GOUvOTN3\nuZNME6mclwKBgEuA/RjKoMBju3b8MsVzVz+vmr3WFagFex9R21TG2HnkwnAXmg4V\ng1Utd0C7gNj+DchQabsTXbwWd9N5Su1n+kTQgaT7kKOtxMM4GMT938IgADYZqKSV\nUfRLP1CNuKog/JCRq5QUnJn3tBQ79XI/jzaHanefnEIgcomLRBU3lVDZAoGAcw6s\nYtSlNFs8xjGePx4pGISRgqvhUPO2XAg0mBOAUjDZ3joPZFhnz+2sOnKC6e1aX5YU\nISP5nKKzq4pXaVzzp+3G0egNF7NL4KMD5mTtdutE2LolMXa9Azggmzd6sBLqhmJP\nswEtkcGMHD3MR/tEk7PXmm6NSLCzEUg4PqQmkc8CgYAR3KABka/RIyeVeV1VpJhB\ns3V70z9DccxYnvMN7AXAO6R7QXjebRtjsE9eytaTyclFlvpq0EsrM7CgFlXC7Lxl\nmz/2MwhoFOgDlGQCPXESRTuqblPBDta3lfMyXf5qE31hnmVkcYRsQxM4XPU0sSNQ\n0RddLODZqGyXeN0xa1yy+g==\n-----END PRIVATE KEY-----\n",
+  "client_email": "geography@fampool-6de94.iam.gserviceaccount.com",
+  "client_id": "101577340137535915628",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/geography%40fampool-6de94.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
