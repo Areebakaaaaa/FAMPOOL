@@ -6,8 +6,35 @@ import * as Location from "expo-location"
 
 export default MapScreen = () => {
 
+  const navigation = useNavigation();
+
   const [currentlocation, setCurrentLocation] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
+  const [address, setAddress]= useState('');
+  
+  const fetchAddress = async (latitude, longitude) => {
+    try{
+      const apiKey="AIzaSyBBRMG64e7-KtKll9mDzlRVBHg7fpsiX-M";
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`
+      );
+      
+      if(!response.ok)
+      {
+        throw new Error('Failede to fetch address');
+      }
+
+      const data = await response.json();
+
+      if(data.results.length > 0){
+        const formattedAddress = data.results[0].formatted_address;
+        setAddress(formattedAddress);
+        console.log("Address: ",formattedAddress);
+      }
+    }catch(error){
+      console.error("Error fetching address: ", error.message);
+    }
+  }
 
   useEffect(() => {
     (async () => {
@@ -20,10 +47,12 @@ export default MapScreen = () => {
       let location = await Location.getCurrentPositionAsync({});
       setCurrentLocation(location);
       console.log("Location: ", location);
+
+      fetchAddress(location.coords.latitude, location.coords.longitude); //fetching address using google geocoding API
     })();
   }, []);
 
-  const navigation = useNavigation();
+  
 
   return (
     <View style={styles.container}>
@@ -47,12 +76,11 @@ export default MapScreen = () => {
         </MapView>
       )}
 
+      {address && (<Text style={styles.addressText}>{address}</Text>)}
+
       {currentlocation && (
         <View style={styles.bottomButtonContainer}>
-          <TouchableOpacity
-            style={styles.buttonBox}
-            onPress={() => navigation.navigate("AvailableRide")}
-          >
+          <TouchableOpacity style={styles.buttonBox} onPress={() => navigation.navigate("AvailableRide")}>
             <Text style={styles.buttonText}>Search a Ride</Text>
           </TouchableOpacity>
         </View>
@@ -91,5 +119,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'white',
     fontWeight: 'bold',
+  },
+  addressText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: 'black',
   },
 });

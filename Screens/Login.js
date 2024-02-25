@@ -17,18 +17,18 @@ const Login = (props) => {
   }
 
   const LoginProcess = async () => {
-    // try{
-    //   const result = await getUser(loginDetails);
-    //   if(result){
-    //     navigation.navigate("HomePage");
-    //   }else{
-    //     alert("Incorrect Nu-Email or Password.");
-    //   }
-    // }catch(err)
-    // {
-    //   console.log(err);
-    //   alert("Login Failed!.");
-    // }
+ try{
+      const result = await getUser(loginDetails);
+      if(result){
+        navigation.navigate("HomePage");
+      }else{
+        alert("Incorrect Nu-Email or Password.");
+      }
+    }catch(err)
+    {
+      console.log(err);
+      alert("Login Failed!.");
+    } */
     navigation.navigate("HomePage");
   }
 
