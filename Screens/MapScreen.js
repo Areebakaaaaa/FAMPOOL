@@ -1,46 +1,61 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from "expo-location"
+
 
 export default MapScreen = () => {
 
   const navigation = useNavigation();
 
-  const [currentlocation, setCurrentLocation] = useState('');
+  const [currentLocation, setCurrentLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState('');
-  const [address, setAddress]= useState('');
-  
+  const [address, setAddress] = useState('');
+  const [destination, setDestination] = useState('');
+
   const fetchAddress = async (latitude, longitude) => {
-    try{
-      const apiKey="AIzaSyBBRMG64e7-KtKll9mDzlRVBHg7fpsiX-M";
+    try {
+      const apiKey = "AIzaSyBBRMG64e7-KtKll9mDzlRVBHg7fpsiX-M";
       const response = await fetch(
         `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`
       );
-      
-      if(!response.ok)
-      {
+
+      if (!response.ok) {
         throw new Error('Failed to fetch address');
       }
 
       const data = await response.json();
       console.log(data);
 
-      if(data.results.length > 0){
+      if (data.results.length > 0) {
         const formattedAddress = data.results[0].formatted_address;
         setAddress(formattedAddress);
-        console.log("Address: ",formattedAddress);
+        console.log("Address: ", formattedAddress);
       }
-    }catch(error){
+    } catch (error) {
       console.error("Error fetching address: ", error.message);
     }
   }
 
+  const handleSearch = () => {
+    // Fetch coordinates for the entered destination (ABC and XYZ are placeholders)
+    const destinationCoordinates = {
+      latitude: -25.80,
+      longitude: 50.05,
+      latitudeDelta: 0.005,
+      longitudeDelta: 0.005,
+    };
+
+    // Update the map to the destination coordinates
+    setCurrentLocation(destinationCoordinates);
+    fetchAddress(destinationCoordinates.latitude, destinationCoordinates.longitude);
+  }
+
   useEffect(() => {
     (async () => {
-      let {status} = await Location.requestForegroundPermissionsAsync();
-      if(status !== 'granted'){
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
         setErrorMsg("Permission to access location was denied");
         return;
       }
@@ -49,29 +64,27 @@ export default MapScreen = () => {
       setCurrentLocation(location);
       console.log("Location: ", location);
 
-      fetchAddress(location.coords.latitude, location.coords.longitude); //fetching address using google geocoding API
+      //fetchAddress(location.coords.latitude, location.coords.longitude); //fetching address using google geocoding API
     })();
   }, []);
 
-  
-
   return (
-    <View style={styles.container}>
-      {currentlocation && (
+    <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
+      {currentLocation && (
         <MapView
           style={styles.map}
           provider={MapView.PROVIDER_GOOGLE}
           initialRegion={{
-            latitude: currentlocation.coords.latitude,
-            longitude: currentlocation.coords.longitude,
+            latitude: currentLocation.coords.latitude,
+            longitude: currentLocation.coords.longitude,
             latitudeDelta: 0.005,
             longitudeDelta: 0.005,
           }}
         >
           <Marker
             coordinate={{
-              latitude: currentlocation.coords.latitude,
-              longitude: currentlocation.coords.longitude,
+              latitude: currentLocation.coords.latitude,
+              longitude: currentLocation.coords.longitude,
             }}
           />
         </MapView>
@@ -79,14 +92,24 @@ export default MapScreen = () => {
 
       {address && (<Text style={styles.addressText}>{address}</Text>)}
 
-      {currentlocation && (
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter destination"
+          value={destination}
+          onChangeText={(text) => setDestination(text)}
+        />
+        <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
+          <Text style={styles.buttonText}>Search</Text>
+        </TouchableOpacity>
+      </View>
+
+      {currentLocation && (
         <View style={styles.bottomButtonContainer}>
-          <TouchableOpacity style={styles.buttonBox} onPress={() => navigation.navigate("AvailableRide")}>
-            <Text style={styles.buttonText}>Search a Ride</Text>
-          </TouchableOpacity>
+          {/* Other UI elements can be added here */}
         </View>
       )}
-    </View>
+    </KeyboardAvoidingView>
   )
 }
 
@@ -108,13 +131,26 @@ const styles = StyleSheet.create({
     right: 0,
     alignItems: 'center',
   },
-  buttonBox: {
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    margin: 10,
+  },
+  input: {
+    flex: 1,
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 5,
+    padding: 8,
+  },
+  searchButton: {
     backgroundColor: '#4CAF50',
+    marginLeft: 10,
     padding: 8,
     alignItems: 'center',
     justifyContent: 'center',
-    width: '80%',
-    borderRadius: 10,
+    borderRadius: 5,
   },
   buttonText: {
     fontSize: 18,
