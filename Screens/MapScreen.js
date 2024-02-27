@@ -21,10 +21,11 @@ export default MapScreen = () => {
       
       if(!response.ok)
       {
-        throw new Error('Failede to fetch address');
+        throw new Error('Failed to fetch address');
       }
 
       const data = await response.json();
+      console.log(data);
 
       if(data.results.length > 0){
         const formattedAddress = data.results[0].formatted_address;
