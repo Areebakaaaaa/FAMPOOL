@@ -72,13 +72,13 @@ const { AdminFirestore } = require('../utils/db');
 
     try{
       const userDoc = await usersCollection.add({
-        customerType: postRideDetails.customerType, 
-        gender: postRideDetails.gender, 
-        acType: postRideDetails.acType, 
+        driverId: postRideDetails.driverId,
+        customerType: postRideDetails.customerType,
         toFromFast: postRideDetails.toFromFast, 
-        time: postRideDetails.time, 
+        departureTime: postRideDetails.time, 
         date: postRideDetails.date, 
-        location: postRideDetails.location,
+        seats: postRideDetails.seats,
+        toFromLocation: postRideDetails.toFromLocation,
       })
 
       console.log("Ride posted successfully with ID: ", userDoc.id);

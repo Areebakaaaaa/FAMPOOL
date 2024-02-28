@@ -3,18 +3,25 @@ import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView } from 
 import { Picker } from '@react-native-picker/picker';
 import { LinearGradient } from 'expo-linear-gradient';
 import { postingRide } from '../services/fampoolAPIs';
+import { Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const PostRide = () => {
+  const navigation = useNavigation();
+
   const [customerType, setCustomerType] = useState('Student');
   const [gender, setGender] = useState('Male');
-  const [acType, setAcType] = useState('AC');
+  //const [acType, setAcType] = useState('AC');
   const [toFromFast, setToFromFast] = useState('TO FAST');
   const [time, setTime] = useState('');
   const [date, setDate] = useState('');
-  const location="ABCXYZ";
+  const [seats, setSeats] = useState('');
+  const [toFromLocation, setToFromLocation]= useState('');
+  const loc="North Nazimabad";
+  const driverId= "k201732";
 
   let postRideDetails={
-    customerType, gender, acType, toFromFast, time, date, location,
+    driverId, customerType, toFromFast, time, date, seats, toFromLocation
   }
 
   useEffect(() => {
@@ -29,9 +36,26 @@ const PostRide = () => {
 
   const postRide = async () => {
     console.log('Ride posted...');
-    console.log({ customerType, gender, acType, toFromFast, time, date });
-    const data = await postingRide(postRideDetails);
-    // Perform the post ride logic here
+    console.log({ customerType, toFromFast, time, date, seats, toFromLocation });
+    
+    try{
+      const result = await postingRide(postRideDetails);
+
+      if(result)
+      {
+        Alert.alert("SUCCESS!, Ride Posted Successfully!.");
+        navigation.navigate("HomePage");
+      }
+      else
+      {
+        Alert.alert("ERROR!, Ride Posting Failed!")
+      }
+
+
+    }catch (err)
+    {
+      console.error(err);
+    }
   };
 
   return (
@@ -48,27 +72,30 @@ const PostRide = () => {
             onValueChange={setCustomerType}
             style={styles.picker}
           >
-            <Picker.Item label="Student" value="Student" />
-            <Picker.Item label="Faculty" value="Faculty" />
+            <Picker.Item label="Not Specific" value="Not Specific" />
+            <Picker.Item label="Male Specific" value="Male Specific" />
+            <Picker.Item label="Female Specific" value="Female Specific" />
+            <Picker.Item label="Faculty Specific" value="Faculty Specific" />
           </Picker>
 
+          {/*
           <Picker
             selectedValue={gender}
             onValueChange={setGender}
             style={styles.picker}
           >
-            <Picker.Item label="Male" value="Male" />
-            <Picker.Item label="Female" value="Female" />
+            <Picker.Item label="Male" value="Male Specific" />
+            <Picker.Item label="Female" value="Female Specific" />
           </Picker>
 
-          <Picker
+           <Picker
             selectedValue={acType}
             onValueChange={setAcType}
             style={styles.picker}
           >
             <Picker.Item label="AC" value="AC" />
             <Picker.Item label="Non AC" value="Non AC" />
-          </Picker>
+          </Picker> */}
 
           <Picker
             selectedValue={toFromFast}
@@ -91,6 +118,20 @@ const PostRide = () => {
             value={date}
             style={styles.input}
             editable={false} // Make it non-editable
+          />
+
+          <TextInput
+            placeholder="Seats"
+            onChangeText={setSeats}
+            value={seats}
+            style={styles.input}
+          />
+
+          <TextInput
+            placeholder="toFromLocation"
+            onChangeText={setToFromLocation}
+            value={toFromLocation}
+            style={styles.input}
           />
 
           <TouchableOpacity
