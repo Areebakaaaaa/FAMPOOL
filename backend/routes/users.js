@@ -26,8 +26,16 @@ router.post('/add-user', (req, res, next) => {
   let userDetails = req.body;
   addUser(userDetails);
   
-  res.send('hello')
+  res.send('added');
 });
+
+router.post('/post-ride', (req, res, next)=>{
+  console.log("Backend Post Ride Entered.");
+  let postRideDetails= req.body;
+  addRide(postRideDetails);
+
+  res.send('Added');
+})
 
 module.exports = router;
 
