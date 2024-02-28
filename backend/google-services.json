@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "641114544429",
-    "project_id": "fampool-2bc42",
-    "storage_bucket": "fampool-2bc42.appspot.com"
+    "project_number": "3180419491",
+    "project_id": "fampool-6de94",
+    "storage_bucket": "fampool-6de94.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:641114544429:android:e3a89b7568336390a8dba4",
+        "mobilesdk_app_id": "1:3180419491:android:ed416942129be83d852216",
         "android_client_info": {
           "package_name": "com.fast.fampool"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDxoNGCXcw219fsOlsTFCx8qa_65I-zlKM"
+          "current_key": "AIzaSyBBRMG64e7-KtKll9mDzlRVBHg7fpsiX-M"
         }
       ],
       "services": {
