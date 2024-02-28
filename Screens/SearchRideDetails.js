@@ -42,7 +42,7 @@ const SearchRideDetails = () => {
   const searchRide = () => {
     console.log('Searching Ride...');
     console.log({ customerType, gender, acType, toFromFast, hours, minutes, amPm, date, destination });
-    navigation.navigate("Abc");
+    navigation.navigate("AvailableRide");
   };
 
   return (
