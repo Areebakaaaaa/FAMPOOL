@@ -13,6 +13,7 @@ import Notification from "./Screens/Notification";
 import MapScreen from './Screens/MapScreen';
 import SearchRide from './Screens/SearchRide';
 import SearchRideDetails from './Screens/SearchRideDetails';
+import Abc from './Screens/Abc';
 
 
 
@@ -66,6 +67,11 @@ export default function App() {
               name="SearchRideDetails"
               component={SearchRideDetails}
               options={{ title: 'SearchRideDetails' , headerShown: false }}
+              />
+              <Stack.Screen
+              name="Abc"
+              component={Abc}
+              options={{ title: 'Abc' , headerShown: false }}
               />
       </Stack.Navigator>
     </NavigationContainer>
