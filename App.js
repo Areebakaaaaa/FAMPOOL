@@ -10,6 +10,9 @@ import HomePage from "./Screens/HomePage";
 import AvailableRide from "./Screens/AvailableRide";
 import PostRide from "./Screens/PostRide";
 import Notification from "./Screens/Notification";
+import MapScreen from './Screens/MapScreen';
+import SearchRide from './Screens/SearchRide';
+import SearchRideDetails from './Screens/SearchRideDetails';
 
 
 
@@ -48,6 +51,21 @@ export default function App() {
               name="Notification"
               component={Notification}
               options={{ title: 'Notification' , headerShown: false }}
+              />
+              <Stack.Screen
+              name="MapScreen"
+              component={MapScreen}
+              options={{ title: 'MapScreen' , headerShown: false }}
+              />
+              <Stack.Screen
+              name="SearchRide"
+              component={SearchRide}
+              options={{ title: 'SearchRide' , headerShown: false }}
+              />
+              <Stack.Screen
+              name="SearchRideDetails"
+              component={SearchRideDetails}
+              options={{ title: 'SearchRideDetails' , headerShown: false }}
               />
       </Stack.Navigator>
     </NavigationContainer>
