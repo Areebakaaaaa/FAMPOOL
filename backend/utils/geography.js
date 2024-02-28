@@ -1,3 +1,3 @@
-const geographyAccess= require('../fampool-6de94-8910be995be3.json');
+const geographyAccess= require('../service_account.json');
 
 module.exports = geographyAccess;

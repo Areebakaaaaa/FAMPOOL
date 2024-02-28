@@ -72,13 +72,13 @@ const { AdminFirestore } = require('../utils/db');
 
     try{
       const userDoc = await usersCollection.add({
-        customerType: postRideDetails.customerType, 
-        gender: postRideDetails.gender, 
-        acType: postRideDetails.acType, 
+        driverId: postRideDetails.driverId,
+        customerType: postRideDetails.customerType,
         toFromFast: postRideDetails.toFromFast, 
-        time: postRideDetails.time, 
+        departureTime: postRideDetails.time, 
         date: postRideDetails.date, 
-        location: postRideDetails.location,
+        seats: postRideDetails.seats,
+        toFromLocation: postRideDetails.toFromLocation,
       })
 
       console.log("Ride posted successfully with ID: ", userDoc.id);
@@ -88,6 +88,24 @@ const { AdminFirestore } = require('../utils/db');
     }
 
   }
-  module.exports = ({addUser, verifyUser, addRide});
+  
+  const getAvailableRide = async (req, res) =>{
+    try{
+      const availableRideCollection= db.collection('availableRides');
+      const snapshot = await availableRideCollection.get();
+      const rides=[];
+      snapshot.forEach(doc => {
+        rides.push({id: doc.id, ... doc.data()});
+      });
+      res.status(200).send(rides);
+    } catch(err){
+      console.error('Error fetching available rides: ', err);
+      res.status(500).send('Error fetching available rides');
+    };
+
+
+  }
+  
+  module.exports = ({addUser, verifyUser, addRide, getAvailableRide});
 
   

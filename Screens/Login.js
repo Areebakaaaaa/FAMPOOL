@@ -29,7 +29,12 @@ const Login = (props) => {
       console.log(err);
       alert("Login Failed!.");
     } 
-    navigation.navigate("HomePage");
+
+    const rollno=nuEmail.split('@')[0];
+    console.log(rollno);
+
+    let x={rollno: rollno};
+    navigation.navigate("HomePage", x);
   }
 
 
