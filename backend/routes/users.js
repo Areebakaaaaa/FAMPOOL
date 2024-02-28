@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const {addUser, verifyUser, addRide, getAvailableRide} = require('../controllers/userController');
+const {addUser, verifyUser, addRide, getAvailableRide, getDemoLocation} = require('../controllers/userController');
 
 router.post('/get-user', async (req, res, next) => {
   console.log("Get user.");
@@ -53,6 +53,7 @@ router.post('/post-ride', async (req, res) => {
 });
 
 router.get('/available-rides', getAvailableRide);
+router.get('/demo-location', getDemoLocation);
 
 module.exports = router;
 

@@ -104,10 +104,25 @@ const { AdminFirestore } = require('../utils/db');
       console.error('Error fetching available rides: ', err);
       res.status(500).send('Error fetching available rides');
     };
+  }
 
+  const getDemoLocation = async (req, res) =>{
+    try{
+      const demoLocationCollection= AdminFirestore.collection('demoLocation');
+      const snapshot = await demoLocationCollection.get();
+      const loc=[];
+      snapshot.forEach(doc => {
+        loc.push({id: doc.id, ... doc.data()});
+      });
 
+      console.log("Available Rides: ", loc);
+      res.status(200).send(loc);
+    } catch(err){
+      console.error('Error fetching available rides: ', err);
+      res.status(500).send('Error fetching available rides');
+    };
   }
   
-  module.exports = ({addUser, verifyUser, addRide, getAvailableRide});
+  module.exports = ({addUser, verifyUser, addRide, getAvailableRide, getDemoLocation});
 
   

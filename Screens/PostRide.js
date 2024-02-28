@@ -18,7 +18,7 @@ const PostRide = () => {
   const [seats, setSeats] = useState('');
   const [toFromLocation, setToFromLocation]= useState('');
   const loc="North Nazimabad";
-  const driverId= "k201732";
+  const driverId= "k200000";
 
   let postRideDetails={
     driverId, customerType, toFromFast, time, date, seats, toFromLocation
