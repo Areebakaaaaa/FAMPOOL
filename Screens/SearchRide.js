@@ -8,7 +8,7 @@ export default MapScreen = () => {
   const navigation = useNavigation();
 
   const [currentLocation, setCurrentLocation] = useState('');
-  const [markerPosition, setMarkerPosition] = useState(null);
+  const [markerPosition, setMarkerPosition] = useState('');
 
   useEffect(() => {
     (async () => {
@@ -31,7 +31,7 @@ export default MapScreen = () => {
   const handleMarkerDragEnd = (e) => {
     const { latitude, longitude } = e.nativeEvent.coordinate;
     setMarkerPosition({ latitude, longitude });
-    console.log("Marker Position: ", currentLocation); // Change here
+    console.log("Marker Position: ", currentLocation);
   };
 
   return (
@@ -59,14 +59,14 @@ export default MapScreen = () => {
 
       {currentLocation && (
         <View style={styles.bottomButtonContainer}>
-          <TouchableOpacity style={styles.buttonBox} onPress={() => navigation.navigate("AvailableRide")}>
+          <TouchableOpacity style={styles.buttonBox} onPress={() => navigation.navigate("SearchRideDetails")}>
             <Text style={styles.buttonText}>Search a Ride</Text>
           </TouchableOpacity>
         </View>
       )}
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {

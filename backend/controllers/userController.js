@@ -4,6 +4,7 @@ const { AdminFirestore } = require('../utils/db');
 
   async function addUser(userDetails) {
     const usersCollection = AdminFirestore.collection('users');
+    
     const dateTime = new Date();
     //console.log(dateTime);
     const date = dateTime.toLocaleDateString('en-US',{
@@ -37,8 +38,8 @@ const { AdminFirestore } = require('../utils/db');
       });
   
       console.log('User added successfully with ID:', userDoc.id);
-    } catch (error) {
-      console.error('Error adding user:', error);
+    } catch (err) {
+      console.error('Error adding user:', err);
     }
   }
   
@@ -66,6 +67,27 @@ const { AdminFirestore } = require('../utils/db');
   }
 }
 
-  module.exports = ({addUser, verifyUser});
+  async function addRide(postRideDetails){
+    const usersCollection = AdminFirestore.collection('availableRides');
+
+    try{
+      const userDoc = await usersCollection.add({
+        customerType: postRideDetails.customerType, 
+        gender: postRideDetails.gender, 
+        acType: postRideDetails.acType, 
+        toFromFast: postRideDetails.toFromFast, 
+        time: postRideDetails.time, 
+        date: postRideDetails.date, 
+        location: postRideDetails.location,
+      })
+
+      console.log("Ride posted successfully with ID: ", userDoc.id);
+    }catch(err)
+    {
+      console.error("Error posting ride: ", err);
+    }
+
+  }
+  module.exports = ({addUser, verifyUser, addRide});
 
   

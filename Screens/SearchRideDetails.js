@@ -2,19 +2,31 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { LinearGradient } from 'expo-linear-gradient';
-import { postingRide } from '../services/fampoolAPIs';
+import { useNavigation } from '@react-navigation/native';
 
-const PostRide = () => {
+const SearchRideDetails = () => {
+  const navigation = useNavigation();
+
   const [customerType, setCustomerType] = useState('Student');
   const [gender, setGender] = useState('Male');
   const [acType, setAcType] = useState('AC');
   const [toFromFast, setToFromFast] = useState('TO FAST');
-  const [time, setTime] = useState('');
+  const [hours, setHours] = useState('');
+  const [minutes, setMinutes] = useState('');
+  const [amPm, setAmPm] = useState('AM');
   const [date, setDate] = useState('');
-  const location="ABCXYZ";
+  const [destination, setDestination] = useState('');
 
-  let postRideDetails={
-    customerType, gender, acType, toFromFast, time, date, location,
+  let rideDetails={
+    customerType,
+    gender,
+    acType,
+    toFromFast,
+    hours,
+    minutes,
+    amPm,
+    date,
+    destination,
   }
 
   useEffect(() => {
@@ -27,11 +39,10 @@ const PostRide = () => {
     setDate(formattedDate);
   }, []);
 
-  const postRide = async () => {
-    console.log('Ride posted...');
-    console.log({ customerType, gender, acType, toFromFast, time, date });
-    const data = await postingRide(postRideDetails);
-    // Perform the post ride logic here
+  const searchRide = () => {
+    console.log('Searching Ride...');
+    console.log({ customerType, gender, acType, toFromFast, hours, minutes, amPm, date, destination });
+    navigation.navigate("AvailableRide",{rideDetails});
   };
 
   return (
@@ -41,7 +52,7 @@ const PostRide = () => {
         style={styles.container}
       >
         <View style={styles.card}>
-          <Text style={styles.header}>Post a Ride</Text>
+          <Text style={styles.header}>Search a Ride</Text>
 
           <Picker
             selectedValue={customerType}
@@ -79,25 +90,61 @@ const PostRide = () => {
             <Picker.Item label="FROM FAST" value="FROM FAST" />
           </Picker>
 
-          <TextInput
-            placeholder="DepartureTime"
-            onChangeText={setTime}
-            value={time}
-            style={styles.input}
-          />
+          <View style={styles.timeContainer}>
+            <View style={styles.timeBox}>
+              <Text style={styles.label}>Hour</Text>
+              <TextInput
+                placeholder="01"
+                onChangeText={setHours}
+                value={hours}
+                style={styles.timeInput}
+                keyboardType="numeric"
+                maxLength={2}
+              />
+            </View>
+
+            <View style={styles.timeBox}>
+              <Text style={styles.label}>Minute</Text>
+              <TextInput
+                placeholder="56"
+                onChangeText={setMinutes}
+                value={minutes}
+                style={styles.timeInput}
+                keyboardType="numeric"
+                maxLength={2}
+              />
+            </View>
+
+            <View style={styles.timeBox}>
+              <Text style={styles.label}>AM/PM</Text>
+              <Picker
+                selectedValue={amPm}
+                onValueChange={setAmPm}
+                style={[styles.pickerAmPm, { color: 'black' }]} // Set color to black
+              >
+                <Picker.Item label="AM" value="AM" />
+                <Picker.Item label="PM" value="PM" />
+              </Picker>
+            </View>
+          </View>
+
           <TextInput
             placeholder="Date"
             onChangeText={setDate}
             value={date}
             style={styles.input}
-            editable={false} // Make it non-editable
+            editable={false} // To make it non-editable
           />
 
-          <TouchableOpacity
-            style={styles.button}
-            onPress={postRide}
-          >
-            <Text style={styles.buttonText}>Post Ride</Text>
+          <TextInput
+            placeholder="Destination"
+            onChangeText={setDestination}
+            value={destination}
+            style={styles.input}
+          />
+
+          <TouchableOpacity style={styles.button} onPress={searchRide}>
+            <Text style={styles.buttonText}>Search</Text>
           </TouchableOpacity>
         </View>
       </LinearGradient>
@@ -138,6 +185,33 @@ const styles = StyleSheet.create({
     width: '100%',
     marginVertical: 10,
   },
+  pickerAmPm: {
+    width: 80,
+    marginVertical: 10,
+  },
+  timeContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  timeBox: {
+    flex: 1,
+    marginRight: 10,
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#005A4A',
+    marginBottom: 5,
+  },
+  timeInput: {
+    borderWidth: 1,
+    borderColor: '#ddd',
+    padding: 10,
+    borderRadius: 5,
+    backgroundColor: '#F0F0F0',
+    textAlign: 'center',
+  },
   input: {
     borderWidth: 1,
     borderColor: '#ddd',
@@ -159,4 +233,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PostRide;
+export default SearchRideDetails;

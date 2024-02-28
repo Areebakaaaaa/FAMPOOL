@@ -1,8 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView } from 'react-native';
-import { Ionicons } from '@expo/vector-icons'; // Make sure to install expo icons or replace with your own
+import { Ionicons } from '@expo/vector-icons';
 
 const AvailableRidesScreen = () => {
+
   return (
     <View style={styles.container}>
       <View style={styles.searchContainer}>
@@ -35,7 +36,6 @@ const AvailableRidesScreen = () => {
             <Text style={styles.bookNowText}>Book now</Text>
           </TouchableOpacity>
         </View>
-        {/* More ride cards can be added here */}
       </ScrollView>
     </View>
   );
