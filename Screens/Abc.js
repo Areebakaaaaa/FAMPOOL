@@ -6,6 +6,7 @@ import { FlatList } from 'react-native';
 const Abc = ({route}) => {
   const ride = route.params.ride;
 
+  const [seats, setSeats]= useState("");
 
   /* const [rides, setRides] = useState([]);
   const ipv4='http://192.168.100.14';
@@ -28,7 +29,7 @@ const Abc = ({route}) => {
   return (
     <View style={styles.rideCard}>
       <Text style={styles.rideDetails}>
-        {ride.seats} seats
+        Ride Fare: Rs.{ride.seats} seats
       </Text>
     </View>
   );
