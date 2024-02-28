@@ -3,8 +3,11 @@ import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView } from 
 import { Ionicons } from '@expo/vector-icons';
 import { FlatList } from 'react-native';
 
-const Demo = () => {
-  const [rides, setRides] = useState([]);
+const Abc = ({route}) => {
+  const ride = route.params.ride;
+
+
+  /* const [rides, setRides] = useState([]);
   const ipv4='http://192.168.100.14';
 
   useEffect(()=>{
@@ -20,21 +23,13 @@ const Demo = () => {
     };
 
     fetchRides();
-  }, []);
+  }, []); */
 
   return (
-    <View style={styles.container}>
-        <FlatList
-        data={rides}
-        keyExtractor={item=>item.id}
-        renderItem={({ item }) => (
-          <View style={styles.rideCard}>
-            <Text style={styles.rideDetails}>
-              {item.locationOne} - {item.LocationTwo}
-            </Text>
-          </View>
-        )} 
-        />
+    <View style={styles.rideCard}>
+      <Text style={styles.rideDetails}>
+        {ride.seats} seats
+      </Text>
     </View>
   );
 };
@@ -115,7 +110,7 @@ const styles = StyleSheet.create({
   bookNowText: {
     color: 'white',
   },
-  // Additional styles can be added here
 });
 
-export default Demo;
+
+export default Abc;
