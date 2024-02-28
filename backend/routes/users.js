@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const {addUser, verifyUser, addRide} = require('../controllers/userController');
+const {addUser, verifyUser, addRide, getAvailableRide} = require('../controllers/userController');
 
 router.post('/get-user', async (req, res, next) => {
   console.log("Get user.");
@@ -50,6 +50,8 @@ router.post('/post-ride', async (req, res) => {
     res.status(500).send({ error: 'Failed to post ride due to an internal error.' });
   }
 });
+
+router.get('/available-rides', getAvailableRide);
 
 module.exports = router;
 
