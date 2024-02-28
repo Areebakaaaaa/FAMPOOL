@@ -45,5 +45,11 @@ export const postingRide= async (postRideDetails) => {
     }
 }
 
+export const getAvailableRides = async() => {
+    console.log("Entered available ride API.");
+    const response = await axios.get(`${ipv4}:5000/users/available-rides`);
+    const data = await response.json();
+}
+
 
 
