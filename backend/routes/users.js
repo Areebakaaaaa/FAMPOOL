@@ -34,6 +34,7 @@ router.post('/add-user', (req, res, next) => {
 router.post('/post-ride', async (req, res) => {
   console.log('Backend Post Ride Entered.');
   const postRideDetails = req.body;
+  //getAvailableRide();
 
   try {
     const result = await addRide(postRideDetails);

@@ -91,12 +91,14 @@ const { AdminFirestore } = require('../utils/db');
   
   const getAvailableRide = async (req, res) =>{
     try{
-      const availableRideCollection= db.collection('availableRides');
+      const availableRideCollection= AdminFirestore.collection('availableRides');
       const snapshot = await availableRideCollection.get();
       const rides=[];
       snapshot.forEach(doc => {
         rides.push({id: doc.id, ... doc.data()});
       });
+
+      console.log("Available Rides: ", rides);
       res.status(200).send(rides);
     } catch(err){
       console.error('Error fetching available rides: ', err);

@@ -1,42 +1,40 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { FlatList } from 'react-native';
 
 const AvailableRidesScreen = () => {
+  const [rides, setRides] = useState([]);
+  const ipv4='http://192.168.100.14';
+
+  useEffect(()=>{
+    const fetchRides = async () => {
+      try{
+        console.log("Fetching Rides.");
+        const response = await fetch(`${ipv4}:5000/users/available-rides`);
+        const data = await response.json();
+        setRides(data);
+      } catch(err){
+        console.error('Error fetching rides: ', err);
+      }
+    };
+
+    fetchRides();
+  }, []);
 
   return (
     <View style={styles.container}>
-      <View style={styles.searchContainer}>
-        <Ionicons name="search" size={25} color="grey" />
-        <TextInput
-          placeholder="Where would you go?"
-          style={styles.searchInput}
+        <FlatList
+        data={rides}
+        keyExtractor={item=>item.id}
+        renderItem={({ item }) => (
+          <View style={styles.rideCard}>
+            <Text style={styles.rideDetails}>
+              {item.customerType} - {item.date} - {item.time} 
+            </Text>
+          </View>
+        )} 
         />
-      </View>
-      <ScrollView style={styles.scrollView}>
-        <View style={styles.rideCard}>
-          <View style={styles.rideDetails}>
-            <Text style={styles.rideCode}>K201732</Text>
-            <Text style={styles.rideInfo}>White Vitz (2018) AAB-017</Text>
-            <Text style={styles.rideTiming}>Leaving At: 2:15 PM</Text>
-          </View>
-          <View style={styles.rideStats}>
-            <View style={styles.acIndicator}>
-              <Text style={styles.acText}>AC</Text>
-            </View>
-            <View style={styles.seatsIndicator}>
-              <Text style={styles.seatsText}>Seats: 2/4</Text>
-              <Text style={styles.seatsText}>1 Male 1 Female</Text>
-            </View>
-            <View style={styles.priceIndicator}>
-              <Text style={styles.priceText}>PKR 300, Cash</Text>
-            </View>
-          </View>
-          <TouchableOpacity style={styles.bookNowButton}>
-            <Text style={styles.bookNowText}>Book now</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
     </View>
   );
 };
@@ -70,6 +68,8 @@ const styles = StyleSheet.create({
   },
   rideDetails: {
     alignItems: 'center',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
   rideCode: {
     fontWeight: 'bold',
