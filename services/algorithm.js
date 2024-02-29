@@ -13,7 +13,7 @@ let totalPassengerDistance = 0;
   {
     totalPassengerDistance+= distances[i];
   }
-  totalPassengerDistance+= dis;
+  totalPassengerDistance=totalPassengerDistance+ dis;
   console.log("Total Passenger Distance: ",totalPassengerDistance);
 
   let passengers = [];
