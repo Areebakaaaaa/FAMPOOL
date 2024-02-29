@@ -2,12 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { FlatList } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
-const AvailableRidesScreen = () => {
+const AvailableRidesScreen = ({route}) => {
+  const rideDetails= route.params;
+  const navigation = useNavigation();
   const [rides, setRides] = useState([]);
-  const ipv4='http://192.168.100.14';
+  const ipv4='http://172.16.88.220';
 
   useEffect(()=>{
+    console.log("Available ride page: ",rideDetails.destination);
+    
     const fetchRides = async () => {
       try{
         console.log("Fetching Rides.");
@@ -21,6 +26,12 @@ const AvailableRidesScreen = () => {
 
     fetchRides();
   }, []);
+
+  const hojaPlease = (item) => {
+    console.log("Hoja bhaee ma roojaongaaa ab!.");
+    navigation.navigate("Abc", { ride: item, ...rideDetails });
+  }
+
 
   return (
     <View style={styles.container}>
@@ -44,7 +55,7 @@ const AvailableRidesScreen = () => {
                 <Ionicons name="male" size={16} color="#0000FF" /> {item.maleCount}
               </Text>
             </View>
-            <TouchableOpacity style={styles.bookNowButton}>
+            <TouchableOpacity style={styles.bookNowButton} onPress={()=> hojaPlease(item)}>
               <Text style={styles.bookNowText}>Book now</Text>
             </TouchableOpacity>
           </View>

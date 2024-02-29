@@ -1,78 +1,47 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button } from 'react-native';
+export const calculateFareShares = (seats, dis) => {
 
-const FareCalculator = () => {
-  const [numPassengers, setNumPassengers] = useState('');
-  const [totalDistance, setTotalDistance] = useState('');
-  const [totalFare, setTotalFare] = useState('');
-  const [distances, setDistances] = useState([]);
-  const [fareShares, setFareShares] = useState([]);
+  // Example usage:
+const numPassengers = 2; // Example value
+//const totalDistance = 18; // Example value
+const distances = [10, 18, 16]; // Example distances
+const totalFare = 540; // Example fare
 
-  const calculateFareShares = () => {
-    const distancesArray = distances.map(distance => parseFloat(distance));
-    const totalPassengerDistance = distancesArray.reduce((acc, distance) => acc + distance, 0);
+let totalPassengerDistance = 0;
 
-    const calculatedFareShares = distancesArray.map((distance, index) => {
-      const distanceShare = distance / totalPassengerDistance;
-      const fareShare = distanceShare * parseFloat(totalFare);
-      
-      return {
-        name: `Passenger ${index + 1}`,
-        distance,
-        fareShare,
+  //let totalPassengerDistance = distances.reduce((acc, distance) => acc + distance, 0);
+  for(let i=0; i<seats; ++i)
+  {
+    totalPassengerDistance+= distances[i];
+  }
+  totalPassengerDistance+= dis;
+  console.log("Total Passenger Distance: ",totalPassengerDistance);
+
+  let passengers = [];
+  let i;
+  for (i = 0; i < seats; ++i) {
+    console.log(distances[i]);
+      let passenger = {
+          name: `Passenger ${i + 1}`,
+          distance: distances[i],
+          fareShare: (distances[i] / totalPassengerDistance) * totalFare
       };
-    });
+      passengers.push(passenger);
+  }
 
-    setFareShares(calculatedFareShares);
-  };
-
-  return (
-    <View>
-      <Text>Enter the number of passengers:</Text>
-      <TextInput
-        value={numPassengers}
-        onChangeText={setNumPassengers}
-        keyboardType="numeric"
-      />
-
-      <Text>Enter the distance for each passenger:</Text>
-      {Array.from({ length: parseInt(numPassengers) }, (_, index) => (
-        <View key={index}>
-          <Text>{`Distance for Passenger ${index + 1}:`}</Text>
-          <TextInput
-            value={distances[index]}
-            onChangeText={value => {
-              const updatedDistances = [...distances];
-              updatedDistances[index] = value;
-              setDistances(updatedDistances);
-            }}
-            keyboardType="numeric"
-          />
-        </View>
-      ))}
-
-      <Text>Enter the total distance of the route:</Text>
-      <TextInput
-        value={totalDistance}
-        onChangeText={setTotalDistance}
-        keyboardType="numeric"
-      />
-
-      <Text>Enter the total fare for the trip:</Text>
-      <TextInput
-        value={totalFare}
-        onChangeText={setTotalFare}
-        keyboardType="numeric"
-      />
-
-      <Button title="Calculate Fare Shares" onPress={calculateFareShares} />
-
-      <Text>Fare Shares:</Text>
-      {fareShares.map(passenger => (
-        <Text key={passenger.name}>{`${passenger.name}: ${passenger.fareShare}`}</Text>
-      ))}
-    </View>
-  );
+  console.log("Value of i: ", i);
+  let extra = {
+    name: `Passenger ${i + 1}`,
+    fareShare: (dis / totalPassengerDistance) * totalFare
 };
+passengers.push(extra);
 
-export default FareCalculator;
+  //fareShares.forEach(passenger => {console.log(`${passenger.name}: ${passenger.fareShare}`);
+  passengers.forEach(passenger => {
+    console.log(`${passenger.name}: ${passenger.fareShare}`);
+  });
+
+  return passengers;
+}
+
+
+
