@@ -1,5 +1,5 @@
 import axios from 'axios';
-const ipv4='http://192.168.100.14'
+import ipv4 from './config';
 
 export const addUser = async (userDetails) => {
     try{
@@ -49,6 +49,7 @@ export const getAvailableRides = async() => {
     console.log("Entered available ride API.");
     const response = await axios.get(`${ipv4}:5000/users/available-rides`);
     const data = await response.json();
+    return response.data;
 }
 
 

@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView } from 
 import {calculateFareShares} from '../services/algorithm';
 import { Ionicons } from '@expo/vector-icons';
 import { Alert } from 'react-native';
+import ipv4 from '../services/config';
 
 const Abc = ({route}) => {
   const ride = route.params.ride;
@@ -12,7 +13,7 @@ const Abc = ({route}) => {
   
 
   const [rides, setRides] = useState([]);
-  const ipv4='http://172.16.88.220';
+  
 
   
   useEffect(()=>{
