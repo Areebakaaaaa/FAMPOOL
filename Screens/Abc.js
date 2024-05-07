@@ -3,8 +3,11 @@ import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView } from 
 import {calculateFareShares} from '../services/algorithm';
 import { Ionicons } from '@expo/vector-icons';
 import { Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import ipv4 from '../services/config';
 
 const Abc = ({route}) => {
+  const navigation=useNavigation();
   const ride = route.params.ride;
   const rideDetails= route.params;
 
@@ -12,7 +15,7 @@ const Abc = ({route}) => {
   
 
   const [rides, setRides] = useState([]);
-  const ipv4='http://172.16.88.220';
+  
 
   
   useEffect(()=>{
@@ -23,8 +26,31 @@ const Abc = ({route}) => {
         const response = await fetch(`${ipv4}:5000/users/demo-location`);
         const data = await response.json();
         setRides(data);
+        console.log("From database ",data);
 
-        const val=calculateFareShares(ride.seats,16);
+        let des = 0;
+        if (rideDetails.destination === "Malir Halt" && data.length > 0) {
+          des = data[0].locationOne; // Assuming the first item contains the relevant location
+          console.log("Destination fareeha: ", des);
+        }
+        else if (rideDetails.destination === "Malir 15" && data.length > 0) {
+          des = data[0].locationTwo;
+          console.log("Destination fareeha: ", des);
+        }
+        else if (rideDetails.destination === "Qaidabad" && data.length > 0) {
+          des = data[0].locationThree;
+          console.log("Destination fareeha: ", des);
+        }
+        else if (rideDetails.destination === "Drigh Road" && data.length > 0) {
+          des = data[0].locationFour;
+          console.log("Destination fareeha: ", des);
+        }
+        else{
+          console.log("Nothing");
+        }
+
+        console.log("Value going: ",des);
+        const val=calculateFareShares(ride.seats,Number(des));
         console.log("Fare is: ", val);
         setFare(val);
         
@@ -41,7 +67,7 @@ const Abc = ({route}) => {
 
   const confirmBooking = () => {
     Alert.alert("Booking Confirmation", "Ride Booked!", [
-      { text: "OK", onPress: () => navigation.navigate('HomePage') }
+      { text: "OK", onPress: () => navigation.navigate('RideStatus') }
     ]);
   };
 

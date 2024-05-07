@@ -3,12 +3,13 @@ import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView } from 
 import { Ionicons } from '@expo/vector-icons';
 import { FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import ipv4 from '../services/config';
 
 const AvailableRidesScreen = ({route}) => {
   const rideDetails= route.params;
   const navigation = useNavigation();
   const [rides, setRides] = useState([]);
-  const ipv4='http://172.16.88.220';
+ 
 
   useEffect(()=>{
     console.log("Available ride page: ",rideDetails.destination);

@@ -15,6 +15,8 @@ import SearchRide from './Screens/SearchRide';
 import SearchRideDetails from './Screens/SearchRideDetails';
 import Abc from './Screens/Abc';
 
+import RideStatus from './Screens/RideStatus';
+
 
 
 export default function App() {
@@ -72,6 +74,12 @@ export default function App() {
               name="Abc"
               component={Abc}
               options={{ title: 'Abc' , headerShown: false }}
+              />
+
+              <Stack.Screen
+              name="RideStatus"
+              component={RideStatus}
+              options={{ title: 'RideStatus' , headerShown: false }}
               />
       </Stack.Navigator>
     </NavigationContainer>
