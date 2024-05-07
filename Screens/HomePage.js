@@ -61,7 +61,6 @@ export default function HomePage() {
 }
 
 const styles = StyleSheet.create({
-
   container: {
     flex: 1,
   },
