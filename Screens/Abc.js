@@ -3,9 +3,11 @@ import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView } from 
 import {calculateFareShares} from '../services/algorithm';
 import { Ionicons } from '@expo/vector-icons';
 import { Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import ipv4 from '../services/config';
 
 const Abc = ({route}) => {
+  const navigation=useNavigation();
   const ride = route.params.ride;
   const rideDetails= route.params;
 
@@ -65,7 +67,7 @@ const Abc = ({route}) => {
 
   const confirmBooking = () => {
     Alert.alert("Booking Confirmation", "Ride Booked!", [
-      { text: "OK", onPress: () => navigation.navigate('HomePage') }
+      { text: "OK", onPress: () => navigation.navigate('RideStatus') }
     ]);
   };
 
