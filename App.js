@@ -17,12 +17,17 @@ import Abc from './Screens/Abc';
 
 import RideStatus from './Screens/RideStatus';
 
+import React from 'react';
+import { Provider } from 'react-redux';
+import store from './store';
+
 
 
 export default function App() {
   const Stack = createNativeStackNavigator();
 
   return (
+    <Provider store={store}>
     <NavigationContainer>
       <Stack.Navigator>
               <Stack.Screen
@@ -83,6 +88,7 @@ export default function App() {
               />
       </Stack.Navigator>
     </NavigationContainer>
+    </Provider>
   );
 }
 
