@@ -3,13 +3,18 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, StatusBar } from '
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useDispatch, useSelector } from 'react-redux';
-import { loginUser, logoutUser } from '@actions/sessionActions';
+import { loginUser, logoutUser } from '@actions/sessionActions'; // Ensure this path is correct
 import { useNavigation } from '@react-navigation/native';
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
+
+  // Using useSelector to get the isLoggedIn state from Redux store
   const isLoggedIn = useSelector(state => state.session.isLoggedIn); // Update path if needed
+
+  // Log the current isLoggedIn state whenever it changes
+  console.log("Current login status:", isLoggedIn);
 
   const [nuEmail, setNuEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -18,9 +23,10 @@ const Login = () => {
     try {
       // Simulating an API call to log in
       // const result = await getUser({ nuEmail, password });
-      const result = true; // Replace with actual API call result check
+      const result = true; // Assume login is successful for testing
       if (result) {
         dispatch(loginUser({ nuEmail })); // Dispatch login action
+        
         navigation.navigate("HomePage", { rollno: nuEmail.split('@')[0] });
       } else {
         alert("Incorrect Nu-Email or Password.");
@@ -118,7 +124,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   loginButtonText: {
-    color: '#86ba90', // Adjusted to match the green theme
+    color: '#86ba90',
     fontSize: 18,
     fontWeight: 'bold',
   },
@@ -139,4 +145,5 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
   },
 });
+
 export default Login;
