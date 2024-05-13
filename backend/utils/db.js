@@ -16,7 +16,7 @@ module.exports = {AdminFirestore, storage} */
 
 const admin = require('firebase-admin');
 
-const serviceAccount = require('../fampool-2bc42-firebase-adminsdk-46k8f-9cea0cd195.json');
+const serviceAccount = require('../firebase_db.json');
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
