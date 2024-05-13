@@ -1,3 +1,3 @@
-const ipv4='http://172.16.68.42'
+const ipv4='http://192.168.100.14'
 
 module.exports= ipv4;
