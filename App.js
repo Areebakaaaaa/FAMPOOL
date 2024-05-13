@@ -16,8 +16,8 @@ import SearchRideDetails from './Screens/SearchRideDetails';
 import Abc from './Screens/Abc';
 
 import RideStatus from './Screens/RideStatus';
- //nsjdsnkfnsekfn
- 
+
+
 
 
 export default function App() {
