@@ -20,6 +20,7 @@ import RideStatus from './Screens/RideStatus';
 //lalalallala
 
 
+
 export default function App() {
   const Stack = createNativeStackNavigator();
 

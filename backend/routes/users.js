@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const {addUser, verifyUser, addRide, getAvailableRide, getDemoLocation} = require('../controllers/userController');
+const {addUser, verifyUser} = require('../controllers/userController');
 
 router.post('/get-user', async (req, res, next) => {
   console.log("Get user.");
@@ -30,30 +30,6 @@ router.post('/add-user', (req, res, next) => {
   
   res.send('added');
 });
-
-router.post('/post-ride', async (req, res) => {
-  console.log('Backend Post Ride Entered.');
-  const postRideDetails = req.body;
-  //getAvailableRide();
-
-  try {
-    const result = await addRide(postRideDetails);
-
-    if(result)
-    {
-      res.status(200).send({ message: 'Ride posted successfully' });
-    } else{
-      res.status(200).send({ message: 'Ride posted unsuccessfully' });
-    }
-    
-  } catch (error) {
-    console.error('Error posting ride:', error);
-    res.status(500).send({ error: 'Failed to post ride due to an internal error.' });
-  }
-});
-
-router.get('/available-rides', getAvailableRide);
-router.get('/demo-location', getDemoLocation);
 
 module.exports = router;
 

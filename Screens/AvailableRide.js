@@ -17,7 +17,7 @@ const AvailableRidesScreen = ({route}) => {
     const fetchRides = async () => {
       try{
         console.log("Fetching Rides.");
-        const response = await fetch(`${ipv4}:5000/users/available-rides`);
+        const response = await fetch(`${ipv4}:5000/rides/available-rides`);
         const data = await response.json();
         setRides(data);
       } catch(err){
