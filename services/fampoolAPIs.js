@@ -35,7 +35,7 @@ export const getUser = async (loginDetails) => {
 export const postingRide= async (postRideDetails) => {
     try{
         console.log("Posting ride API entered.", postRideDetails.toFromFast);
-        const res = await axios.post(`${ipv4}:5000/users/post-ride`, postRideDetails);
+        const res = await axios.post(`${ipv4}:5000/rides/post-ride`, postRideDetails);
         console.log("Post ride API exit.");
         return res.data;
 
@@ -47,10 +47,20 @@ export const postingRide= async (postRideDetails) => {
 
 export const getAvailableRides = async() => {
     console.log("Entered available ride API.");
-    const response = await axios.get(`${ipv4}:5000/users/available-rides`);
+    const response = await axios.get(`${ipv4}:5000/rides/available-rides`);
     const data = await response.json();
     return response.data;
 }
 
+export const bookingRide= async(bookRideDetails) => {
+    try{
+        console.log("Book ride API entered.", bookRideDetails.aaa);
+        const response = await axios.post(`${ipv4}:5000/rides/book-ride`,bookRideDetails);
+        console.log("Book ride API exit.");
+        return response.data;
+    }catch(err){
+        console.error(err);
+    }
+}
 
 
