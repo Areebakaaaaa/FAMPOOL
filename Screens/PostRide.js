@@ -11,7 +11,6 @@ const PostRide = () => {
 
   const [customerType, setCustomerType] = useState('Student');
   const [gender, setGender] = useState('Male');
-  //const [acType, setAcType] = useState('AC');
   const [toFromFast, setToFromFast] = useState('TO FAST');
   const [time, setTime] = useState('');
   const [date, setDate] = useState('');

@@ -5,17 +5,29 @@ import { Ionicons } from '@expo/vector-icons';
 import { Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ipv4 from '../services/config';
+import { bookingRide } from '../services/fampoolAPIs';
 
 const Abc = ({route}) => {
   const navigation=useNavigation();
   const ride = route.params.ride;
   const rideDetails= route.params;
 
+  const [rides, setRides] = useState([]);
   const [fare, setFare] = useState('');
   
 
-  const [rides, setRides] = useState([]);
+  const [userId, setUserId] = useState('k201732');
+  const [driverId, setDriverId] = useState('k201609');
+  const [pickUp, setPickUp] = useState('Home North Nazimabad');
+  const [dropOff, setDropOff] = useState('Fast Nu');
+  const [rideStatus, setRideStatus] = useState('Pending');
+
+  const [aaa, setAAA]= useState('');
   
+  let bookRideDetails = {
+    userId, driverId, aaa, pickUp, dropOff, rideStatus,
+
+  }
 
   
   useEffect(()=>{
@@ -23,7 +35,7 @@ const Abc = ({route}) => {
     const fetchRides = async () => {
       try{
         console.log("Fetching Rides.");
-        const response = await fetch(`${ipv4}:5000/users/demo-location`);
+        const response = await fetch(`${ipv4}:5000/rides/demo-location`);
         const data = await response.json();
         setRides(data);
         console.log("From database ",data);
@@ -64,11 +76,28 @@ const Abc = ({route}) => {
     
   }, []); 
 
+  useEffect(() => {
+    setAAA(fare.length > 0 ? fare[fare.length - 1].fareShare.toFixed(2) : '');
+  }, [fare]);
+  
 
-  const confirmBooking = () => {
-    Alert.alert("Booking Confirmation", "Ride Booked!", [
-      { text: "OK", onPress: () => navigation.navigate('RideStatus') }
-    ]);
+
+  const confirmBooking = async() => {
+    console.log('Ride Booked!.');
+
+    try{
+      const result = await bookingRide(bookRideDetails);
+
+      if(result){
+        Alert.alert("Booking Confirmation", "Ride Booked!", [{ text: "OK", onPress: () => navigation.navigate('RideStatus')}]);
+      }
+      else{
+        Alert.alert("ERROR!. RIDE BOOKING FAILED");
+      }
+
+    }catch(err){
+      console.error(err);
+    }
   };
 
   return (
