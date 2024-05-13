@@ -25,8 +25,8 @@ const Login = () => {
     try {
     
       // Simulating an API call to log in
-      const result = await getUser({ nuEmail, password });
-     
+     // const result = await getUser({ nuEmail, password });
+     const result= true;
       if (result) {
         dispatch(loginUser({ nuEmail })); // Dispatch login action
         console.log("Current login status:", isLoggedIn);

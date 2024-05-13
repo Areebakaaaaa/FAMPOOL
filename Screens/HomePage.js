@@ -19,14 +19,19 @@ export default function HomePage() {
           <Text style={styles.title}>Welcome to FAMPOOL</Text>
           
           <View style={styles.menu}>
-            <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("SearchRide")}>
+            <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("MapScreen")}>
               <Ionicons name="search" size={24} color="#4CAF50" />
-              <Text style={styles.menuText}>Search Ride</Text>
+              <Text style={styles.menuText}>Map Screen</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("PostRide")}>
               <Ionicons name="car-sport" size={24} color="#4CAF50" />
               <Text style={styles.menuText}>Post Ride</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("Chatbot")}>
+              <Ionicons name="car-sport" size={24} color="#4CAF50" />
+              <Text style={styles.menuText}>Chatbot</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("Notification")}>

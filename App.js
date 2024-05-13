@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
+import ChatbotScreen from "./Screens/ChatbotScreen";
 import Login from "./Screens/Login";
 import Registration from "./Screens/Registration";
 import HomePage from "./Screens/HomePage";
@@ -60,11 +60,7 @@ export default function App() {
               component={Notification}
               options={{ title: 'Notification' , headerShown: false }}
               />
-              <Stack.Screen
-              name="MapScreen"
-              component={MapScreen}
-              options={{ title: 'MapScreen' , headerShown: false }}
-              />
+            
               <Stack.Screen
               name="SearchRide"
               component={SearchRide}
@@ -86,6 +82,18 @@ export default function App() {
               component={RideStatus}
               options={{ title: 'RideStatus' , headerShown: false }}
               />
+
+            <Stack.Screen
+              name="MapScreen"
+              component={MapScreen}
+              options={{ title: 'MapScreen' , headerShown: false }}
+              />
+
+
+              <Stack.Screen name="Chatbot" component={ChatbotScreen}
+              options={{ title: 'Chatbot' , headerShown: false }}
+              />
+
       </Stack.Navigator>
     </NavigationContainer>
     </Provider>
