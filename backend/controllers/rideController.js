@@ -60,6 +60,25 @@ async function addRide(postRideDetails){
     };
   }
 
+  const getBookedRide = async (req,res) =>{
+    try{
+      const bookedRideCollection=AdminFirestore.collection('bookedRides');
+      const snapshot= await bookedRideCollection.get();
+      const rides=[];
+      snapshot.forEach(doc=>{
+        rides.push({id:doc.id,...doc.data()});
+      });
+
+      console.log("Booked Rides: ",rides);
+      res.status(200).send(rides);
+    }catch(err){
+      console.error('Error fetching booked rides: ', err);
+      res.status(500).send('Error fetching booked rides');
+    }
+  }
+
+
+
   const getDemoLocation = async (req, res) =>{
     try{
       const demoLocationCollection= AdminFirestore.collection('demoLocation');
@@ -77,4 +96,4 @@ async function addRide(postRideDetails){
     };
   }
   
-  module.exports = ({addRide, bookRide, getAvailableRide, getDemoLocation});
+  module.exports = ({addRide, bookRide, getAvailableRide, getBookedRide, getDemoLocation});
