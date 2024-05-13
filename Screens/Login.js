@@ -5,6 +5,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser, logoutUser } from '@actions/sessionActions'; // Ensure this path is correct
 import { useNavigation } from '@react-navigation/native';
+import { getUser } from '../services/fampoolAPIs';
+
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -21,12 +23,13 @@ const Login = () => {
 
   const LoginProcess = async () => {
     try {
+    
       // Simulating an API call to log in
-      // const result = await getUser({ nuEmail, password });
-      const result = true; // Assume login is successful for testing
+      const result = await getUser({ nuEmail, password });
+     
       if (result) {
         dispatch(loginUser({ nuEmail })); // Dispatch login action
-        
+        console.log("Current login status:", isLoggedIn);
         navigation.navigate("HomePage", { rollno: nuEmail.split('@')[0] });
       } else {
         alert("Incorrect Nu-Email or Password.");
