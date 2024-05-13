@@ -1,91 +1,67 @@
-// import React from "react";
-// import {View, Text, Button} from 'react-native';
-// import { StyleSheet } from "react-native";
-// import { useNavigation } from "@react-navigation/native";
-
-// export default AvailableRide = () =>
-// {
-//     const navigation = useNavigation();
-
-//     const fortest = () =>
-//     {
-//         navigation.navigate("HomePage");
-//     }
-
-//     return(
-//         <View style={styles.layout}>
-
-//             <View>
-//                 <Text>This is Available Ride page.</Text>
-//             </View>
-
-//             <View style={styles.button_layout}>
-//                 <Button style={styles.button_detail} title="Go Back" onPress={fortest} />
-//             </View>
-
-//         </View>
-//     )
-// }
-
-// const styles = StyleSheet.create
-// ({
-//     layout:{
-//         marginTop: 60,
-
-//     },
-//     button_layout: {
-//         marginTop: 20,
-//         marginLeft: 10,
-//         marginRight: 10,
-//     },
-//     button_detail:{
-//         borderBottomStartRadius: 10,
-
-//     }
-// })
-
-
-//Version 2
-
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView } from 'react-native';
-import { Ionicons } from '@expo/vector-icons'; // Make sure to install expo icons or replace with your own
+import { Ionicons } from '@expo/vector-icons';
+import { FlatList } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import ipv4 from '../services/config';
 
-const AvailableRidesScreen = () => {
+const AvailableRidesScreen = ({route}) => {
+  const rideDetails= route.params;
+  const navigation = useNavigation();
+  const [rides, setRides] = useState([]);
+ 
+
+  useEffect(()=>{
+    console.log("Available ride page: ",rideDetails.destination);
+    
+    const fetchRides = async () => {
+      try{
+        console.log("Fetching Rides.");
+        const response = await fetch(`${ipv4}:5000/rides/available-rides`);
+        const data = await response.json();
+        setRides(data);
+      } catch(err){
+        console.error('Error fetching rides: ', err);
+      }
+    };
+
+    fetchRides();
+  }, []);
+
+  const hojaPlease = (item) => {
+    console.log("Hoja bhaee ma roojaongaaa ab!.");
+    navigation.navigate("Abc", { ride: item, ...rideDetails });
+  }
+
+
   return (
     <View style={styles.container}>
-      <View style={styles.searchContainer}>
-        <Ionicons name="search" size={25} color="grey" />
-        <TextInput
-          placeholder="Where would you go?"
-          style={styles.searchInput}
-        />
-      </View>
-      <ScrollView style={styles.scrollView}>
-        <View style={styles.rideCard}>
-          <View style={styles.rideDetails}>
-            <Text style={styles.rideCode}>K201732</Text>
-            <Text style={styles.rideInfo}>White Vitz (2018) AAB-017</Text>
-            <Text style={styles.rideTiming}>Leaving At: 2:15 PM</Text>
+      <FlatList
+        data={rides}
+        keyExtractor={item => item.id.toString()} // Make sure to convert the ID to string if it's not already
+        renderItem={({ item }) => (
+          <View style={styles.rideCard}>
+            <Text style={styles.rideDetails}>
+              {item.customerType} - {item.date} - {item.departureTime}
+            </Text>
+            <Text style={styles.rideLocation}>
+             {item.toFromFast} - {item.toFromLocation}
+            </Text>
+            <Text style={styles.rideInfo}>Seats: {item.seats}</Text>
+            <View style={styles.genderCountContainer}>
+              <Text style={styles.genderCount}>
+                <Ionicons name="female" size={16} color="#FF00FF" /> {item.femaleCount}
+              </Text>
+              <Text style={styles.genderCount}>
+                <Ionicons name="male" size={16} color="#0000FF" /> {item.maleCount}
+              </Text>
+            </View>
+            <TouchableOpacity style={styles.bookNowButton} onPress={()=> hojaPlease(item)}>
+              <Text style={styles.bookNowText}>Book now</Text>
+            </TouchableOpacity>
           </View>
-          <View style={styles.rideStats}>
-            <View style={styles.acIndicator}>
-              <Text style={styles.acText}>AC</Text>
-            </View>
-            <View style={styles.seatsIndicator}>
-              <Text style={styles.seatsText}>Seats: 2/4</Text>
-              <Text style={styles.seatsText}>1 Male 1 Female</Text>
-            </View>
-            <View style={styles.priceIndicator}>
-              <Text style={styles.priceText}>PKR 300, Cash</Text>
-            </View>
-          </View>
-          <TouchableOpacity style={styles.bookNowButton}>
-            <Text style={styles.bookNowText}>Book now</Text>
-          </TouchableOpacity>
-        </View>
-        {/* More ride cards can be added here */}
-      </ScrollView>
+        )}
+      />
     </View>
   );
 };
@@ -93,78 +69,63 @@ const AvailableRidesScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
-  },
-  searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#f2f2f2',
-    paddingHorizontal: 10,
-    margin: 40,
-    borderRadius: 25,
-  },
-  searchInput: {
-    flex: 1,
-    padding: 15,
-  },
-  scrollView: {
-    flex: 1,
+    backgroundColor: '#f8f8f8',
+    padding: 10,
   },
   rideCard: {
-    backgroundColor: '#90ee90',
-    margin: 10,
-    borderRadius: 10,
-    padding: 15,
+    backgroundColor: '#009688',
+    marginVertical: 8,
+    borderRadius: 20,
+    padding: 20,
     alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3,
   },
-  rideDetails: {
-    alignItems: 'center',
+  rideLocation: {
+    fontSize: 16,
+    color: '#FFFFFF',
+    marginBottom: 8,
   },
   rideCode: {
+    fontSize: 18,
     fontWeight: 'bold',
-    fontSize: 16,
+    color: '#800080',
   },
   rideInfo: {
-    fontSize: 14,
+    fontSize: 16,
+    color: '#FFFFFF',
   },
-  rideTiming: {
-    fontSize: 14,
-    color: 'grey',
-  },
-  rideStats: {
+  genderCountContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '100%',
-    marginTop: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: 8,
   },
-  acIndicator: {
-    backgroundColor: 'lightblue',
-    padding: 5,
-    borderRadius: 5,
+  genderCount: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginHorizontal: 10,
   },
-  seatsIndicator: {
-    backgroundColor: 'lightpink',
-    padding: 5,
-    borderRadius: 5,
+  rideFare: {
+    fontSize: 16,
+    color: '#4B0082',
+    marginBottom: 12,
   },
-  priceIndicator: {
-    backgroundColor: 'lightyellow',
-    padding: 5,
-    borderRadius: 5,
-  },
-  acText: {},
-  seatsText: {},
-  priceText: {},
   bookNowButton: {
-    backgroundColor: 'green',
-    padding: 10,
-    borderRadius: 5,
-    marginTop: 10,
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 30,
+    paddingVertical: 10,
+    borderRadius: 20,
   },
   bookNowText: {
-    color: 'white',
+    color: '#009688',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
-  // Additional styles can be added here
+  // Add other styles as needed
 });
 
 export default AvailableRidesScreen;

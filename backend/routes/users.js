@@ -1,18 +1,35 @@
 var express = require('express');
 var router = express.Router();
-const addUser = require('../controllers/userController')
+const {addUser, verifyUser} = require('../controllers/userController');
 
-/* GET users listing. */
-router.get('/get-user', function(req, res, next) {
-  res.send('respond with a resource');
+router.post('/get-user', async (req, res, next) => {
+  console.log("Get user.");
+  let loginDetails = req.body;
+  
+  try{
+    const result = await verifyUser(loginDetails);
+    if(result){
+      res.status(200).send(true);
+    } else{
+      res.status(200).send(false);
+    }
+    
+  }catch(err)
+  {
+    console.error(err);
+    res.status(500).send("Server Error.");
+  }
+  
 });
 
 router.post('/add-user', (req, res, next) => {
+  
   let userDetails = req.body;
+  console.log('HELLO')
   addUser(userDetails);
   
-  res.send('hello')
-})
+  res.send('added');
+});
 
 module.exports = router;
 
