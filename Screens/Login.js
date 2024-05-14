@@ -154,42 +154,44 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, StatusBar } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient'; // Make sure to install this
-import { getUser } from '../services/fampoolAPIs';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser, logoutUser } from '@actions/sessionActions'; // Ensure this path is correct
 import { useNavigation } from '@react-navigation/native';
+import { getUser } from '../services/fampoolAPIs';
 
-const Login = (props) => {
+
+const Login = () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
+
+  // Using useSelector to get the isLoggedIn state from Redux store
+  const isLoggedIn = useSelector(state => state.session.isLoggedIn); // Update path if needed
+
+  // Log the current isLoggedIn state whenever it changes
+  console.log("Current login status:", isLoggedIn);
 
   const [nuEmail, setNuEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  let loginDetails = {
-    nuEmail: nuEmail,
-    password: password,
-  }
-
   const LoginProcess = async () => {
- try{
-      /* const result = await getUser(loginDetails);
-      if(result){
-        navigation.navigate("HomePage");
-      }else{
+    try {
+    
+      // Simulating an API call to log in
+     // const result = await getUser({ nuEmail, password });
+     const result= true;
+      if (result) {
+        dispatch(loginUser({ nuEmail })); // Dispatch login action
+        console.log("Current login status:", isLoggedIn);
+        navigation.navigate("HomePage", { rollno: nuEmail.split('@')[0] });
+      } else {
         alert("Incorrect Nu-Email or Password.");
-      }*/
-    }catch(err)
-    {
-      console.log(err);
-      alert("Login Failed!.");
-    } 
-
-    const rollno=nuEmail.split('@')[0];
-    console.log(rollno);
-
-    let x={rollno: rollno};
-    navigation.navigate("HomePage", x);
-  }
-
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Login Failed!");
+    }
+  };
 
   return (
     <LinearGradient colors={['#00987B', '#009688', '#00796B']} style={styles.container}>
@@ -199,16 +201,14 @@ const Login = (props) => {
         <Text style={styles.loginText}>Login</Text>
         <View style={styles.inputContainer}>
           <Ionicons name="mail-outline" size={24} color="#fff" />
-          <TextInput style={styles.inputField} placeholder="NU-Email" placeholderTextColor="#ccc" onChangeText={setNuEmail}
-          keyboardType="email-address" autoCapitalize="none" />
+          <TextInput style={styles.inputField} placeholder="NU-Email" placeholderTextColor="#ccc" 
+            onChangeText={setNuEmail} keyboardType="email-address" autoCapitalize="none" />
         </View>
-
         <View style={styles.inputContainer}>
           <Ionicons name="key-outline" size={24} color="#fff" />
-          <TextInput style={styles.inputField} placeholder="Password" placeholderTextColor="#ccc" onChangeText={setPassword}
-          secureTextEntry={true} />
+          <TextInput style={styles.inputField} placeholder="Password" placeholderTextColor="#ccc" 
+            onChangeText={setPassword} secureTextEntry={true} />
         </View>
-
         <TouchableOpacity style={styles.forgotPasswordContainer} onPress={() => alert("Logged In")}>
           <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
         </TouchableOpacity>
@@ -217,7 +217,7 @@ const Login = (props) => {
         </TouchableOpacity>
         <View style={styles.signupPrompt}>
           <Text style={styles.signupText}>Don't have an account?</Text>
-          <TouchableOpacity onPress={() => props.navigation.navigate("Registration")}>
+          <TouchableOpacity onPress={() => navigation.navigate("Registration")}>
             <Text style={styles.signupButtonText}>Sign Up</Text>
           </TouchableOpacity>
         </View>
@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   loginButtonText: {
-    color: '#86ba90', // Adjusted to match the green theme
+    color: '#86ba90',
     fontSize: 18,
     fontWeight: 'bold',
   },
