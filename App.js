@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-
+import registerNNPushToken from 'native-notify';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -16,12 +16,15 @@ import SearchRideDetails from './Screens/SearchRideDetails';
 import Abc from './Screens/Abc';
 
 import RideStatus from './Screens/RideStatus';
-
-//lalalallala
+import registerNNPushToken from 'native-notify';
+import React from 'react';
+import { Provider } from 'react-redux';
+import store from './store';
 
 
 
 export default function App() {
+  registerNNPushToken(21285, 'QeCyr7CVa7RYcF0b9VcdEm');
   const Stack = createNativeStackNavigator();
 
   return (
