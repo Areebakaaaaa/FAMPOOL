@@ -51,7 +51,13 @@ const styles= StyleSheet.create({
         color: '#00987B',
         fontWeight: 'bold',
       },
-
+      logo: {
+        width: 150, // Adjust width as necessary
+        height: 150, // Adjust height as necessary
+        resizeMode: 'contain',
+        alignSelf: 'center',
+        marginBottom: 20,
+      },
 })
 
 export default styles;

@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, StatusBar } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, StatusBar } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient'; // Make sure to install this
 import { getUser } from '../services/fampoolAPIs';
 import { useNavigation } from '@react-navigation/native';
-//import {icon} from "../assets/icon.png"
 
 const Login = (props) => {
   const navigation = useNavigation();
@@ -40,19 +39,23 @@ const Login = (props) => {
 
 
   return (
-    <LinearGradient colors={['#00987B', '#009688', '#00796B']} style={styles.container}>
+    <LinearGradient colors={['#189b8b', '#189b8b', '#189b8b']} style={styles.container}>
       <StatusBar barStyle="light-content" />
       <View style={styles.loginCard}>
-        <Ionicons name="ios-person-circle-outline" size={120} color="#fff" style={styles.iconStyle} />
-        <Text style={styles.loginText}>Login</Text>
+      <Image
+          source={require('../assets/FAMPOOLLOGO.png')}
+          style={styles.logo}
+        />
+        
+         <Text style={styles.loginText}>Login</Text>
         <View style={styles.inputContainer}>
-          <Ionicons name="mail-outline" size={24} color="#fff" />
+          <Ionicons name="mail" size={24} color="#fff" />
           <TextInput style={styles.inputField} placeholder="NU-Email" placeholderTextColor="#ccc" onChangeText={setNuEmail}
           keyboardType="email-address" autoCapitalize="none" />
         </View>
 
         <View style={styles.inputContainer}>
-          <Ionicons name="key-outline" size={24} color="#fff" />
+          <Ionicons name="key" size={24} color="#fff" />
           <TextInput style={styles.inputField} placeholder="Password" placeholderTextColor="#ccc" onChangeText={setPassword}
           secureTextEntry={true} />
         </View>
@@ -62,7 +65,6 @@ const Login = (props) => {
         </TouchableOpacity>
         <TouchableOpacity style={styles.loginButton} onPress={LoginProcess}>
           <Text style={styles.loginButtonText}>Login</Text>
-          {/* <image src={icon}/> */}
         </TouchableOpacity>
         <View style={styles.signupPrompt}>
           <Text style={styles.signupText}>Don't have an account?</Text>
@@ -129,7 +131,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   loginButtonText: {
-    color: '#00987B', // Adjusted to match the green theme
+    color: '#189b8b',
     fontSize: 18,
     fontWeight: 'bold',
   },
@@ -148,6 +150,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     textDecorationLine: 'underline',
+  },
+
+  logo: {
+    width: 200, 
+    height: 200, 
+    resizeMode: 'contain',
+    alignSelf: 'center',
+    marginBottom: 20,
   },
 });
 
