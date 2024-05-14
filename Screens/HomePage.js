@@ -21,11 +21,17 @@ export default function HomePage() {
             <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("SearchRide")}>
               <Ionicons name="search" size={24} color="#00987B" />
               <Text style={styles.menuText}>Search Ride</Text>
+
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("PostRide")}>
               <Ionicons name="car-sport" size={24} color="#4CAF50" />
               <Text style={styles.menuText}>Post Ride</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("Chatbot")}>
+              <Ionicons name="car-sport" size={24} color="#4CAF50" />
+              <Text style={styles.menuText}>Chatbot</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("Notification")}>
