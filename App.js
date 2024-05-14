@@ -17,9 +17,13 @@ import Abc from './Screens/Abc';
 
 import RideStatus from './Screens/RideStatus';
 
+
 import React from 'react';
 import { Provider } from 'react-redux';
 import store from './store';
+
+//lalalallala
+
 
 
 

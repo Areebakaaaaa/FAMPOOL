@@ -11,14 +11,13 @@ const PostRide = () => {
 
   const [customerType, setCustomerType] = useState('Student');
   const [gender, setGender] = useState('Male');
-  //const [acType, setAcType] = useState('AC');
   const [toFromFast, setToFromFast] = useState('TO FAST');
   const [time, setTime] = useState('');
   const [date, setDate] = useState('');
   const [seats, setSeats] = useState('');
   const [toFromLocation, setToFromLocation]= useState('');
   const loc="North Nazimabad";
-  const driverId= "k200000";
+  const driverId= "k201730";
 
   let postRideDetails={
     driverId, customerType, toFromFast, time, date, seats, toFromLocation
