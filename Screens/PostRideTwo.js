@@ -1,4 +1,3 @@
-import React, { useRef, useState, useEffect } from "react";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import {
   StyleSheet,
@@ -6,18 +5,14 @@ import {
   Dimensions,
   Text,
   TouchableOpacity,
-  Alert,
 } from "react-native";
 import {
-  GooglePlaceDetail,
   GooglePlacesAutocomplete,
 } from "react-native-google-places-autocomplete";
-import MapViewDirections from "react-native-maps-directions";
 import Constants from "expo-constants";
-import configData from '../services/config';
-import { useNavigation } from "@react-navigation/native";
-import { Picker } from '@react-native-picker/picker';
-import { postingRide } from "../services/fampoolAPIs";
+import { useRef, useState } from "react";
+import MapViewDirections from "react-native-maps-directions";
+import haversine from 'haversine';
 
 const { width, height } = Dimensions.get("window");
 const ASPECT_RATIO = width / height;
@@ -31,11 +26,14 @@ const INITIAL_POSITION = {
   longitudeDelta: LONGITUDE_DELTA,
 };
 
-function InputAutocomplete({ label, placeholder, onPlaceSelected }) {
-  // Set the location to Karachi coordinates and radius to cover the city
-  const karachiLocation = '24.8600,67.0011'; // Karachi coordinates
-  const radius = '10000'; // 10km radius
+const FAST_COORDINATES = {
+  latitude: 24.8568991,
+  longitude: 67.2646838,
+};
 
+const FAST_NAME = "FAST National University Karachi Campus";
+
+function InputAutocomplete({ label, placeholder, onPlaceSelected }) {
   return (
     <>
       <Text>{label}</Text>
@@ -47,48 +45,29 @@ function InputAutocomplete({ label, placeholder, onPlaceSelected }) {
           onPlaceSelected(details);
         }}
         query={{
-          key: configData.myApiKey,
+          key: "AIzaSyAdzroihH6uXiye_A-1Q8EKa7GTz2Sgdpk",
           language: "en",
-          location: karachiLocation, // Restrict results to Karachi
-          radius: radius, // Define radius to cover Karachi area
+          components: "country:pk", // Restrict to Pakistan
+          location: "24.8607,67.0011", // Karachi coordinates
+          radius: 50000, // 50 km radius from Karachi center
         }}
       />
     </>
   );
 }
 
-const PostRideTwo = ({ route }) => {
-  const postRideDetails = route.params;
-  const navigation = useNavigation();
+export default function App() {
   const [origin, setOrigin] = useState(null);
   const [destination, setDestination] = useState(null);
-  const [location, setLocation] = useState(null);
-  const [showDirections, setShowDirections] = useState(false);
+  const [waypoints, setWaypoints] = useState([]);
+  const [routeReady, setRouteReady] = useState(false);
   const [distance, setDistance] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [waypoints, setWaypoints] = useState([]);
-  const bookedSeats= 0;
+  const [waypointDistances, setWaypointDistances] = useState([]);
+  const [waypointDurations, setWaypointDurations] = useState([]);
+  const [routeCoordinates, setRouteCoordinates] = useState([]);
   const mapRef = useRef(null);
 
-  const [toFromFast, setToFromFast]= useState('TO FAST-NUCES Main Campus');
-
-  const fastName="FAST National University Karachi Campus";
-  const fastAddress="St-4, Sector 17-D، NH 5, Bin Qasim Town, Karachi, Karachi City, Sindh, Pakistan";
-  const fastLatitude=24.8568991;
-  const fastLongitude=67.2646838;
-
-
-
-  let postRideDetailsTwo={
-    driverId: postRideDetails.driverId, 
-    customerType: postRideDetails.customerType, 
-    hours: postRideDetails.hours, 
-    minutes: postRideDetails.minutes, 
-    amPm: postRideDetails.amPm, 
-    date: postRideDetails.date, 
-    seats: postRideDetails.seats,
-    origin, destination, distance, duration, waypoints, bookedSeats
-  }
   const moveTo = async (position) => {
     const camera = await mapRef.current?.getCamera();
     if (camera) {
@@ -106,140 +85,73 @@ const PostRideTwo = ({ route }) => {
     left: edgePaddingValue,
   };
 
-  useEffect(() => {
-    if (showDirections && origin && destination) {
-      mapRef.current?.fitToCoordinates([origin, destination, ...waypoints], { edgePadding });
-    }
-  }, [showDirections, origin, destination, waypoints]);
-
   const traceRouteOnReady = (args) => {
     if (args) {
       setDistance(args.distance);
       setDuration(args.duration);
-      console.log("Origin-Destination distance:", args.distance);
-      if (args.waypoints) {
-        waypoints.forEach((waypoint, index) => {
-          console.log(`Waypoint ${index + 1} name:`, waypoint?.name);
-        });
-      }
+      setRouteCoordinates(args.coordinates);
+      setRouteReady(true);
     }
   };
 
-  const traceRoute = () => {
-    let updatedOrigin, updatedDestination;
-    
-    if (toFromFast === "TO FAST-NUCES Main Campus") {
-      updatedDestination = {
-        latitude: fastLatitude,
-        longitude: fastLongitude,
-        address: fastAddress,
-        name: fastName,
-      };
-      updatedOrigin = location;
-    } else {
-      updatedOrigin = {
-        latitude: fastLatitude,
-        longitude: fastLongitude,
-        address: fastAddress,
-        name: fastName,
-      };
-      updatedDestination = location;
+  const traceWaypointRouteOnReady = (args, index) => {
+    if (args) {
+      const newWaypointDistances = [...waypointDistances];
+      const newWaypointDurations = [...waypointDurations];
+      newWaypointDistances[index] = args.distance;
+      newWaypointDurations[index] = args.duration;
+      setWaypointDistances(newWaypointDistances);
+      setWaypointDurations(newWaypointDurations);
     }
-  
-    // Update state with the new origin and destination
-    setOrigin(updatedOrigin);
-    setDestination(updatedDestination);
-  
-    // Ensure state updates are complete before proceeding
-    setTimeout(() => {
-      if (origin && destination) {
-        setShowDirections(true);
-        mapRef.current?.fitToCoordinates([updatedOrigin, updatedDestination, ...waypoints], { edgePadding });
-        console.log("Updated Origin:", updatedOrigin.name);
-        console.log("Updated Destination:", updatedDestination.name);
-      }
-    }, 100); // Adjust timeout as needed
   };
 
-  const onPlaceSelected = (
-    details,
-    flag
-  ) => {
-    const set = flag === "origin" ? setOrigin : setLocation;
+  const isWithinRoute = (position) => {
+    return routeCoordinates.some(coordinate => {
+      const start = { latitude: coordinate.latitude, longitude: coordinate.longitude };
+      const end = { latitude: position.latitude, longitude: position.longitude };
+      const distance = haversine(start, end, { unit: 'meter' });
+      return distance < 500; // Example radius within 500 meters of the route
+    });
+  };
+
+  const onPlaceSelected = (details, flag) => {
     const position = {
       latitude: details?.geometry.location.lat || 0,
       longitude: details?.geometry.location.lng || 0,
-      address: details?.formatted_address || '',
-      name: details?.name || ''
     };
-    set(position);
+
+    if (flag === "origin") {
+      setOrigin(position);
+    } else if (flag === "destination") {
+      setDestination(position);
+    } else {
+      if (waypoints.length < 4) {
+        if (isWithinRoute(position)) {
+          const newWaypoints = [...waypoints, position];
+          setWaypoints(newWaypoints);
+          setWaypointDistances([...waypointDistances, 0]);
+          setWaypointDurations([...waypointDurations, 0]);
+        } else {
+          alert("Waypoint must be within the route from origin to destination.");
+        }
+      } else {
+        alert("You can add up to 4 waypoints only");
+      }
+    }
+
     moveTo(position);
   };
 
-  const addWaypoint = () => {
-    if (waypoints.length < 4) {
-      setWaypoints([...waypoints, { name: '' }]); // Initialize with an empty object
-    }
+  const setFastAsOrigin = () => {
+    setOrigin(FAST_COORDINATES);
+    moveTo(FAST_COORDINATES);
   };
 
-  const removeWaypoint = (index) => {
-    const updatedWaypoints = [...waypoints];
-    updatedWaypoints.splice(index, 1);
-    setWaypoints(updatedWaypoints);
+  const setFastAsDestination = () => {
+    setDestination(FAST_COORDINATES);
+    moveTo(FAST_COORDINATES);
   };
 
-  const updateWaypoint = (details, index) => {
-    const updatedWaypoints = [...waypoints];
-    updatedWaypoints[index] = {
-      latitude: details?.geometry.location.lat || 0,
-      longitude: details?.geometry.location.lng || 0,
-      address: details?.formatted_address || '',
-      name: details?.name || ''
-    };
-    setWaypoints(updatedWaypoints);
-  };
-
-  /* const postRide = () => {
-    console.log('Ride posted...');
-    console.log('Customer Type is', postRideDetails.customerType);
-    console.log('Am-Pm: ', postRideDetails.amPm);
-    console.log('Fast NUCES Name: ', destination?.name);
-    console.log('Fast NUCES Address: ', destination?.address);
-    console.log('Fast NUCES lat: ', destination.latitude);
-    console.log('Fast NUCES long: ', destination.longitude);
-    waypoints.forEach((waypoint, index) => {
-      console.log(`Waypoint ${index + 1}:`);
-      console.log("Name:", waypoint.name);
-      console.log("Address:", waypoint.address);
-      console.log("Latitude:", waypoint.latitude);
-      console.log("Longitude:", waypoint.longitude);
-    });
-  }; */
-
-  const postRide = async () => {
-    console.log('Ride posted...');
-    console.log(postRideDetailsTwo.waypoints);
-    
-    try{
-      const result = await postingRide(postRideDetailsTwo);
-
-      if(result)
-      {
-        Alert.alert("SUCCESS!, Ride Posted Successfully!.");
-        navigation.navigate("HomePage");
-      }
-      else
-      {
-        Alert.alert("ERROR!, Ride Posting Failed!")
-      }
-
-
-    }catch (err)
-    {
-      console.error(err);
-    }
-  };
-  
   return (
     <View style={styles.container}>
       <MapView
@@ -248,73 +160,86 @@ const PostRideTwo = ({ route }) => {
         provider={PROVIDER_GOOGLE}
         initialRegion={INITIAL_POSITION}
       >
-        {origin && <Marker coordinate={origin} pinColor="green" />}
-        {destination && <Marker coordinate={destination} pinColor="red" />}
+        {origin && <Marker coordinate={origin} />}
+        {destination && <Marker coordinate={destination} />}
         {waypoints.map((waypoint, index) => (
-          waypoint.latitude && waypoint.longitude && (
-            <Marker key={index} coordinate={waypoint} pinColor="blue" />
-          )
+          <Marker key={`waypoint-${index}`} coordinate={waypoint} />
         ))}
-        {showDirections && origin && destination && (
-          <MapViewDirections
-            origin={origin}
-            destination={destination}
-            waypoints={waypoints}
-            apikey={configData.myApiKey}
-            strokeColor="#6644ff"
-            strokeWidth={4}
-            onReady={traceRouteOnReady}
-          />
+        {routeReady && origin && destination && (
+          <>
+            <MapViewDirections
+              origin={origin}
+              destination={destination}
+              apikey={"AIzaSyAdzroihH6uXiye_A-1Q8EKa7GTz2Sgdpk"}
+              strokeColor="#6644ff"
+              strokeWidth={4}
+              onReady={traceRouteOnReady}
+            />
+            {waypoints.map((waypoint, index) => (
+              <MapViewDirections
+                key={`waypoint-direction-${index}`}
+                origin={origin}
+                destination={waypoint}
+                apikey={"AIzaSyAdzroihH6uXiye_A-1Q8EKa7GTz2Sgdpk"}
+                strokeColor="#ff4466"
+                strokeWidth={2}
+                onReady={(args) => traceWaypointRouteOnReady(args, index)}
+              />
+            ))}
+          </>
         )}
       </MapView>
       <View style={styles.searchContainer}>
-        <Picker
-            selectedValue={toFromFast}
-            onValueChange={setToFromFast}
-            style={styles.picker}
-          >
-            <Picker.Item label="TO FAST-NUCES Main Campus" value="TO FAST-NUCES Main Campus" />
-            <Picker.Item label="FROM FAST-NUCES Main Campus" value="FROM FAST-NUCES Main Campus" />
-          </Picker>
-
-
-        <TouchableOpacity style={styles.button} onPress={addWaypoint}>
-          <Text style={styles.buttonText}>Add Waypoint</Text>
-        </TouchableOpacity>
-        {waypoints.map((waypoint, index) => (
-          <View key={index} style={styles.waypointContainer}>
+        {!routeReady ? (
+          <>
             <InputAutocomplete
-              label={`Waypoint ${index + 1}`}
+              label="Origin"
               onPlaceSelected={(details) => {
-                updateWaypoint(details, index);
+                onPlaceSelected(details, "origin");
               }}
             />
-            <TouchableOpacity
-              style={styles.removeButton}
-              onPress={() => removeWaypoint(index)}
-            >
-              <Text style={styles.buttonText}>-</Text>
+            <InputAutocomplete
+              label="Destination"
+              onPlaceSelected={(details) => {
+                onPlaceSelected(details, "destination");
+              }}
+            />
+            <TouchableOpacity style={styles.button} onPress={setFastAsOrigin}>
+              <Text style={styles.buttonText}>Set FAST as Origin</Text>
             </TouchableOpacity>
-          </View>
-        ))}
-        <InputAutocomplete
-          placeholder="Location"
-          onPlaceSelected={(details) => {
-            onPlaceSelected(details, "destination");
-          }}
-        />
-        <TouchableOpacity style={styles.button} onPress={traceRoute}>
-          <Text style={styles.buttonText}>Trace route</Text>
-        </TouchableOpacity>
-        {(distance !== 0 || duration !== 0) && (
-          <View>
-            <Text>Distance: {distance.toFixed(2)} km</Text>
-            <Text>Duration: {Math.ceil(duration)} min</Text>
-          </View>
+            <TouchableOpacity style={styles.button} onPress={setFastAsDestination}>
+              <Text style={styles.buttonText}>Set FAST as Destination</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={() => { if (origin && destination) setRouteReady(true); }}>
+              <Text style={styles.buttonText}>Trace route</Text>
+            </TouchableOpacity>
+          </>
+        ) : (
+          <>
+            {[...Array(4)].map((_, index) => (
+              <InputAutocomplete
+                key={`waypoint-${index}`}
+                label={`Waypoint ${index + 1}`}
+                placeholder={`Add waypoint ${index + 1}`}
+                onPlaceSelected={(details) => {
+                  onPlaceSelected(details, `waypoint-${index}`);
+                }}
+              />
+            ))}
+            {distance && duration ? (
+              <View>
+                <Text>Distance: {distance.toFixed(2)} km</Text>
+                <Text>Duration: {Math.ceil(duration)} min</Text>
+              </View>
+            ) : null}
+            {waypointDistances.map((wpDistance, index) => (
+              <View key={`waypoint-distance-${index}`}>
+                <Text>Waypoint {index + 1} Distance: {wpDistance.toFixed(2)} km</Text>
+                <Text>Waypoint {index + 1} Duration: {Math.ceil(waypointDurations[index])} min</Text>
+              </View>
+            ))}
+          </>
         )}
-        <TouchableOpacity style={styles.button} onPress={postRide}>
-          <Text style={styles.buttonText}>Post Ride</Text>
-        </TouchableOpacity>
       </View>
     </View>
   );
@@ -354,20 +279,8 @@ const styles = StyleSheet.create({
     marginTop: 16,
     borderRadius: 4,
   },
-  removeButton: {
-    backgroundColor: "#bbb",
-    padding: 8,
-    borderRadius: 4,
-    marginLeft: 8,
-    alignSelf: "flex-end",
-  },
-  waypointContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
   buttonText: {
     textAlign: "center",
   },
 });
 
-export default PostRideTwo;

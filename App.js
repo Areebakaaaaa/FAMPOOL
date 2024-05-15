@@ -19,6 +19,9 @@ import MapScreen from './Screens/MapScreen';
 import SearchRide from './Screens/SearchRide';
 import SearchRideDetails from './Screens/SearchRideDetails';
 import Abc from './Screens/Abc';
+import NativeNotify from 'native-notify';
+
+
 
 import RideStatus from './Screens/RideStatus';
 
