@@ -1,199 +1,189 @@
+
+//KEYBOARD VERSION
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { LinearGradient } from 'expo-linear-gradient';
 import { postingRide } from '../services/fampoolAPIs';
 import { Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { GooglePlaceDetail, GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import Constants from "expo-constants";
+import configData from '../services/config';
 
 const PostRide = () => {
-  const navigation = useNavigation();
-
   const [customerType, setCustomerType] = useState('Student');
-  const [gender, setGender] = useState('Male');
-  const [toFromFast, setToFromFast] = useState('TO FAST');
-  const [time, setTime] = useState('');
+  const [hours, setHours] = useState('');
+  const [minutes, setMinutes] = useState('');
+  const [amPm, setAmPm] = useState('');
   const [date, setDate] = useState('');
   const [seats, setSeats] = useState('');
-  const [toFromLocation, setToFromLocation]= useState('');
-  const loc="North Nazimabad";
-  const driverId= "k201730";
-
-  let postRideDetails={
-    driverId, customerType, toFromFast, time, date, seats, toFromLocation
-  }
+  const navigation = useNavigation();
 
   useEffect(() => {
-    // Set the initial date to the current date
     const currentDate = new Date();
     const year = currentDate.getFullYear();
     const month = String(currentDate.getMonth() + 1).padStart(2, '0');
     const day = String(currentDate.getDate()).padStart(2, '0');
     const formattedDate = `${year}-${month}-${day}`;
-    setDate(formattedDate);
+    // setDate(formattedDate);
   }, []);
 
   const postRide = async () => {
-    console.log('Ride posted...');
-    console.log({ customerType, toFromFast, time, date, seats, toFromLocation });
-    
-    try{
+    const postRideDetails = {
+      driverId: "k200452",
+      customerType,
+      hours,
+      minutes,
+      amPm,
+      date,
+      seats
+    };
+
+    try {
       const result = await postingRide(postRideDetails);
-
-      if(result)
-      {
-        Alert.alert("SUCCESS!, Ride Posted Successfully!.");
-        navigation.navigate("HomePage");
-      }
-      else
-      {
-        Alert.alert("ERROR!, Ride Posting Failed!")
-      }
-
-
-    }catch (err)
-    {
+      result
+        ? Alert.alert("SUCCESS!, Ride Posted Successfully!") // Wrap text in <Text> component
+        : Alert.alert("ERROR!, Ride Posting Failed!") // Wrap text in <Text> component
+      navigation.navigate("HomePage");
+    } catch (err) {
       console.error(err);
     }
   };
 
+  const dismissKeyboard = () => {
+    Keyboard.dismiss();
+  };
+
   return (
-    <ScrollView contentContainerStyle={styles.scrollView}>
-      <LinearGradient
-        colors={['#00BC99', '#009688', '#00796B']}
-        style={styles.container}
-      >
-        <View style={styles.card}>
-          <Text style={styles.header}>Post a Ride</Text>
+    <TouchableWithoutFeedback onPress={dismissKeyboard}>
+      <LinearGradient colors={['#00474B', '#00897B']} style={styles.container}>
+        <TouchableOpacity onPress={() => navigation.navigate('NextScreen')} style={styles.nextButton}>
+          <Text style={styles.nextButtonText}>Next</Text>
+        </TouchableOpacity>
+        <Text style={styles.header}>Post a Ride</Text>
 
-          <Picker
-            selectedValue={customerType}
-            onValueChange={setCustomerType}
-            style={styles.picker}
-          >
-            <Picker.Item label="Not Specific" value="Not Specific" />
-            <Picker.Item label="Male Specific" value="Male Specific" />
-            <Picker.Item label="Female Specific" value="Female Specific" />
-            <Picker.Item label="Faculty Specific" value="Faculty Specific" />
-          </Picker>
+        <Picker
+          selectedValue={customerType}
+          onValueChange={setCustomerType}
+          style={styles.picker}
+        >
+          <Picker.Item label="Not Specific" value="Not Specific" />
+          <Picker.Item label="Male" value="Male Specific" />
+          <Picker.Item label="Female" value="Female Specific" />
+        </Picker>
 
-          {/*
-          <Picker
-            selectedValue={gender}
-            onValueChange={setGender}
-            style={styles.picker}
-          >
-            <Picker.Item label="Male" value="Male Specific" />
-            <Picker.Item label="Female" value="Female Specific" />
-          </Picker>
+        <Picker
+          selectedValue={customerType}
+          onValueChange={setCustomerType}
+          style={styles.picker}
+        >
+          <Picker.Item label="Student" value="Student Specific" />
+          <Picker.Item label="Faculty" value="Faculty Specific" /> 
+        </Picker>
 
-           <Picker
-            selectedValue={acType}
-            onValueChange={setAcType}
-            style={styles.picker}
-          >
-            <Picker.Item label="AC" value="AC" />
-            <Picker.Item label="Non AC" value="Non AC" />
-          </Picker> */}
-
-          <Picker
-            selectedValue={toFromFast}
-            onValueChange={setToFromFast}
-            style={styles.picker}
-          >
-            <Picker.Item label="TO FAST" value="TO FAST" />
-            <Picker.Item label="FROM FAST" value="FROM FAST" />
-          </Picker>
-
+        <View style={styles.timeContainer}>
           <TextInput
-            placeholder="DepartureTime"
-            onChangeText={setTime}
-            value={time}
-            style={styles.input}
+            placeholder="Hour"
+            onChangeText={setHours}
+            value={hours}
+            style={styles.timeInput}
+            keyboardType="numeric"
+            maxLength={2}
           />
           <TextInput
-            placeholder="Date"
-            onChangeText={setDate}
-            value={date}
-            style={styles.input}
-            editable={false} // Make it non-editable
+            placeholder="Minute"
+            onChangeText={setMinutes}
+            value={minutes}
+            style={styles.timeInput}
+            keyboardType="numeric"
+            maxLength={2}
           />
-
           <TextInput
-            placeholder="Seats"
-            onChangeText={setSeats}
-            value={seats}
-            style={styles.input}
+            placeholder="AM/PM"
+            onChangeText={setAmPm}
+            value={amPm}
+            style={styles.timeInput}
+            maxLength={2}
           />
-
-          <TextInput
-            placeholder="toFromLocation"
-            onChangeText={setToFromLocation}
-            value={toFromLocation}
-            style={styles.input}
-          />
-
-          <TouchableOpacity
-            style={styles.button}
-            onPress={postRide}
-          >
-            <Text style={styles.buttonText}>Post Ride</Text>
-          </TouchableOpacity>
         </View>
+
+        <TextInput
+          placeholder="Date"
+          onChangeText={setDate}
+          // value={date}
+          style={styles.input}
+        />
+
+        <TextInput
+          placeholder="Seats"
+          onChangeText={setSeats}
+          value={seats}
+          style={styles.input}
+          keyboardType='numeric'
+        />
+
       </LinearGradient>
-    </ScrollView>
+    </TouchableWithoutFeedback>
   );
 };
 
 const styles = StyleSheet.create({
-  scrollView: {
-    flexGrow: 1,
-  },
   container: {
-    flexGrow: 1,
+    flex: 1,
+    padding: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
-  },
-  card: {
-    width: '100%', // Use the full width to ensure it fits on all devices
-    maxWidth: 600, // Maximum width for larger devices
-    backgroundColor: 'white',
-    borderRadius: 10,
-    padding: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
   header: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: '#005A4A',
-    marginBottom: 20,
+    color: '#FFFFFF',
+    marginBottom: 10,
     textAlign: 'center',
   },
   picker: {
     width: '100%',
-    marginVertical: 10,
+    marginVertical: 5,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 5,
+  },
+  timeContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    marginBottom: 20,
+  },
+  timeInput: {
+    borderWidth: 1,
+    borderColor: '#FFFFFF',
+    padding: 7,
+    borderRadius: 5,
+    backgroundColor: '#FFFFFF',
+    flex: 1,
+    marginRight: 2,
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ddd',
-    padding: 10,
+    borderColor: '#FFFFFF',
+    padding: 7,
     borderRadius: 5,
-    backgroundColor: '#F0F0F0',
-    marginBottom: 20,
+    backgroundColor: '#FFFFFF',
+    marginBottom: 10,
+    width: '100%',
+    color: 'grey'
   },
-  button: {
-    backgroundColor: '#00897B',
-    padding: 15,
+  nextButton: {
+    position: 'absolute',
+    top: 30,
+    right: 20,
+    backgroundColor: '#FFFFFF',
+    padding: 10,
     borderRadius: 5,
     alignItems: 'center',
   },
-  buttonText: {
-    color: 'white',
+  nextButtonText: {
+    color: '#00474B',
     fontSize: 18,
     fontWeight: 'bold',
   },
