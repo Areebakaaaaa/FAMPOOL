@@ -1,15 +1,12 @@
 
 //KEYBOARD VERSION
+
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Keyboard, TouchableWithoutFeedback, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { LinearGradient } from 'expo-linear-gradient';
 import { postingRide } from '../services/fampoolAPIs';
-import { Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { GooglePlaceDetail, GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import Constants from "expo-constants";
-import configData from '../services/config';
 
 const PostRide = () => {
   const [customerType, setCustomerType] = useState('Student');
@@ -29,7 +26,29 @@ const PostRide = () => {
     // setDate(formattedDate);
   }, []);
 
-  const postRide = async () => {
+  const validateAndPostRide = async () => {
+    // Check if the date is between 1 and 12 and not negative
+    const parsedHours = parseInt(hours);
+    if (isNaN(parsedHours) || parsedHours < 1 || parsedHours > 12) {
+      Alert.alert('Invalid Time', 'Please enter valid Hour between 1 and 12.');
+
+      return;
+    }
+
+    // Check if the minutes are between 0 and 59 and not negative
+  const parsedMinutes = parseInt(minutes);
+  if (isNaN(parsedMinutes) || parsedMinutes < 0 || parsedMinutes > 59) {
+    Alert.alert('Invalid Time', 'Please enter valid Minutes between 0 and 59.');
+    return;
+  }
+
+  // Check if AM/PM is either 'AM' or 'PM'
+  if (!(amPm.toUpperCase() === 'AM' || amPm.toUpperCase() === 'PM')) {
+    Alert.alert('Invalid Time', 'Please enter AM or PM.');
+    return;
+  }
+
+    // Continue with posting the ride if the date is valid
     const postRideDetails = {
       driverId: "k200452",
       customerType,
@@ -58,12 +77,11 @@ const PostRide = () => {
   return (
     <TouchableWithoutFeedback onPress={dismissKeyboard}>
       <LinearGradient colors={['#00474B', '#00897B']} style={styles.container}>
-        <TouchableOpacity onPress={() => navigation.navigate('NextScreen')} style={styles.nextButton}>
+        <TouchableOpacity onPress={validateAndPostRide} style={styles.nextButton}>
           <Text style={styles.nextButtonText}>Next</Text>
         </TouchableOpacity>
         <Text style={styles.header}>Post a Ride</Text>
-
-        <Picker
+           <Picker
           selectedValue={customerType}
           onValueChange={setCustomerType}
           style={styles.picker}
