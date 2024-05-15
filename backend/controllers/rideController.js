@@ -1,20 +1,28 @@
 const { AdminFirestore } = require('../utils/db');
 
 
-async function addRide(postRideDetails){
+async function addRide(postRideDetailsTwo){
     const usersCollection = AdminFirestore.collection('availableRides');
 
     try{
+      const waypoints = postRideDetailsTwo.waypoints || [];
+
       const userDoc = await usersCollection.add({
-        driverId: postRideDetails.driverId,
-        customerType: postRideDetails.customerType,
-        toFromFast: postRideDetails.toFromFast, 
-        hours: postRideDetails.hours, 
-        minutes: postRideDetails.minutes,
-        amPm:  postRideDetails.amPm,
-        date: postRideDetails.date, 
-        seats: postRideDetails.seats,
-        toFromLocation: postRideDetails.toFromLocation,
+        driverId: postRideDetailsTwo.driverId,
+        customerType: postRideDetailsTwo.customerType,
+        hours: postRideDetailsTwo.hours, 
+        minutes: postRideDetailsTwo.minutes,
+        amPm:  postRideDetailsTwo.amPm,
+        date: postRideDetailsTwo.date, 
+        seats: postRideDetailsTwo.seats,
+
+        origin: postRideDetailsTwo.origin,
+        destination: postRideDetailsTwo.destination,
+        distance: postRideDetailsTwo.distance,
+        duration: postRideDetailsTwo.duration,
+        bookedSeats: postRideDetailsTwo.bookedSeats,
+        waypoints: postRideDetailsTwo.waypoints,
+
       })
 
       console.log("Ride posted successfully with ID: ", userDoc.id);

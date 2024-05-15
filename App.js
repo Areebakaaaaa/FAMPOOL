@@ -1,6 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 
+import { Ionicons } from '@expo/vector-icons';
+
+
+import registerNNPushToken from 'native-notify';
+
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ChatbotScreen from "./Screens/ChatbotScreen";
@@ -19,6 +24,10 @@ import Abc from './Screens/Abc';
 
 import RideStatus from './Screens/RideStatus';
 
+import PostRideTwo from './Screens/PostRideTwo';
+import AvailableRideDetails from './Screens/AvailableRideDetails';
+
+
 
 import React from 'react';
 import { Provider } from 'react-redux';
@@ -29,7 +38,9 @@ import store from './store';
 
 
 
+
 export default function App() {
+  registerNNPushToken(21285, 'QeCyr7CVa7RYcF0b9VcdEm');
   const Stack = createNativeStackNavigator();
 
   return (
@@ -94,6 +105,18 @@ export default function App() {
               options={{ title: 'RideStatus' , headerShown: false }}
               />
 
+              <Stack.Screen
+              name="PostRideTwo"
+              component={PostRideTwo}
+              options={{ title: 'PostRideTwo' , headerShown: false }}
+              />
+              <Stack.Screen
+              name="AvailableRideDetails"
+              component={AvailableRideDetails}
+              options={{ title: 'AvailableRideDetails' , headerShown: false }}
+              />
+
+
             <Stack.Screen
               name="MapScreen"
               component={MapScreen}
@@ -104,6 +127,7 @@ export default function App() {
               <Stack.Screen name="Chatbot" component={ChatbotScreen}
               options={{ title: 'Chatbot' , headerShown: false }}
               />
+
 
       </Stack.Navigator>
     </NavigationContainer>

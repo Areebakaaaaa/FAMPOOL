@@ -92,19 +92,17 @@ const AvailableRideDetails = ({route}) => {
           <Ionicons name="person" size={24} color="#009688" />
           <Text style={styles.rideDetailText}>Seats: {ride.bookedSeats}/{ride.seats}</Text>
         </View>
-        {waypoints.length > 0 && (
-  
-  <Picker
-  selectedValue={waypoint}
-  onValueChange={setWaypoint}
-  style={styles.picker}
->
-  {ride.waypoints.map((waypoint, index) => (
-    <Picker.Item key={index} label={waypoint.name} value={waypoint.name} />
-  ))}
-</Picker>)}
-
-       
+{ride.waypoints.length > 0 && (
+        <Picker
+          selectedValue={waypoint}
+          onValueChange={setWaypoint}
+          style={styles.picker}
+        >
+          {ride.waypoints.map((waypoint, index) => (
+            <Picker.Item key={index} label={waypoint.name} value={waypoint.name} />
+          ))}
+        </Picker>
+)}
 
         <View style={styles.rideDetailRow}>
           <Ionicons name="cash" size={24} color="#009688" />

@@ -32,6 +32,7 @@ const INITIAL_POSITION = {
 };
 
 function InputAutocomplete({ label, placeholder, onPlaceSelected }) {
+  // Set the location to Karachi coordinates and radius to cover the city
   const karachiLocation = '24.8600,67.0011'; // Karachi coordinates
   const radius = '10000'; // 10km radius
 
@@ -66,28 +67,28 @@ const PostRideTwo = ({ route }) => {
   const [distance, setDistance] = useState(0);
   const [duration, setDuration] = useState(0);
   const [waypoints, setWaypoints] = useState([]);
-  const [selectedWaypoint, setSelectedWaypoint] = useState('');
-  const bookedSeats = 0;
+  const bookedSeats= 0;
   const mapRef = useRef(null);
 
-  const [toFromFast, setToFromFast] = useState('TO FAST-NUCES Main Campus');
+  const [toFromFast, setToFromFast]= useState('TO FAST-NUCES Main Campus');
 
-  const fastName = "FAST National University Karachi Campus";
-  const fastAddress = "St-4, Sector 17-D، NH 5, Bin Qasim Town, Karachi, Karachi City, Sindh, Pakistan";
-  const fastLatitude = 24.8568991;
-  const fastLongitude = 67.2646838;
+  const fastName="FAST National University Karachi Campus";
+  const fastAddress="St-4, Sector 17-D، NH 5, Bin Qasim Town, Karachi, Karachi City, Sindh, Pakistan";
+  const fastLatitude=24.8568991;
+  const fastLongitude=67.2646838;
 
-  let postRideDetailsTwo = {
-    driverId: postRideDetails.driverId,
-    customerType: postRideDetails.customerType,
-    hours: postRideDetails.hours,
-    minutes: postRideDetails.minutes,
-    amPm: postRideDetails.amPm,
-    date: postRideDetails.date,
+
+
+  let postRideDetailsTwo={
+    driverId: postRideDetails.driverId, 
+    customerType: postRideDetails.customerType, 
+    hours: postRideDetails.hours, 
+    minutes: postRideDetails.minutes, 
+    amPm: postRideDetails.amPm, 
+    date: postRideDetails.date, 
     seats: postRideDetails.seats,
     origin, destination, distance, duration, waypoints, bookedSeats
   }
-
   const moveTo = async (position) => {
     const camera = await mapRef.current?.getCamera();
     if (camera) {
@@ -126,7 +127,7 @@ const PostRideTwo = ({ route }) => {
 
   const traceRoute = () => {
     let updatedOrigin, updatedDestination;
-
+    
     if (toFromFast === "TO FAST-NUCES Main Campus") {
       updatedDestination = {
         latitude: fastLatitude,
@@ -144,10 +145,12 @@ const PostRideTwo = ({ route }) => {
       };
       updatedDestination = location;
     }
-
+  
+    // Update state with the new origin and destination
     setOrigin(updatedOrigin);
     setDestination(updatedDestination);
-
+  
+    // Ensure state updates are complete before proceeding
     setTimeout(() => {
       if (origin && destination) {
         setShowDirections(true);
@@ -155,7 +158,7 @@ const PostRideTwo = ({ route }) => {
         console.log("Updated Origin:", updatedOrigin.name);
         console.log("Updated Destination:", updatedDestination.name);
       }
-    }, 100);
+    }, 100); // Adjust timeout as needed
   };
 
   const onPlaceSelected = (
@@ -175,7 +178,7 @@ const PostRideTwo = ({ route }) => {
 
   const addWaypoint = () => {
     if (waypoints.length < 4) {
-      setWaypoints([...waypoints, { name: '' }]);
+      setWaypoints([...waypoints, { name: '' }]); // Initialize with an empty object
     }
   };
 
@@ -196,25 +199,47 @@ const PostRideTwo = ({ route }) => {
     setWaypoints(updatedWaypoints);
   };
 
+  /* const postRide = () => {
+    console.log('Ride posted...');
+    console.log('Customer Type is', postRideDetails.customerType);
+    console.log('Am-Pm: ', postRideDetails.amPm);
+    console.log('Fast NUCES Name: ', destination?.name);
+    console.log('Fast NUCES Address: ', destination?.address);
+    console.log('Fast NUCES lat: ', destination.latitude);
+    console.log('Fast NUCES long: ', destination.longitude);
+    waypoints.forEach((waypoint, index) => {
+      console.log(`Waypoint ${index + 1}:`);
+      console.log("Name:", waypoint.name);
+      console.log("Address:", waypoint.address);
+      console.log("Latitude:", waypoint.latitude);
+      console.log("Longitude:", waypoint.longitude);
+    });
+  }; */
+
   const postRide = async () => {
     console.log('Ride posted...');
     console.log(postRideDetailsTwo.waypoints);
-
-    try {
+    
+    try{
       const result = await postingRide(postRideDetailsTwo);
 
-      if (result) {
+      if(result)
+      {
         Alert.alert("SUCCESS!, Ride Posted Successfully!.");
         navigation.navigate("HomePage");
-      } else {
+      }
+      else
+      {
         Alert.alert("ERROR!, Ride Posting Failed!")
       }
 
-    } catch (err) {
+
+    }catch (err)
+    {
       console.error(err);
     }
   };
-
+  
   return (
     <View style={styles.container}>
       <MapView
@@ -244,43 +269,18 @@ const PostRideTwo = ({ route }) => {
       </MapView>
       <View style={styles.searchContainer}>
         <Picker
-          selectedValue={toFromFast}
-          onValueChange={setToFromFast}
-          style={styles.picker}
-        >
-          <Picker.Item label="TO FAST-NUCES Main Campus" value="TO FAST-NUCES Main Campus" />
-          <Picker.Item label="FROM FAST-NUCES Main Campus" value="FROM FAST-NUCES Main Campus" />
-        </Picker>
+            selectedValue={toFromFast}
+            onValueChange={setToFromFast}
+            style={styles.picker}
+          >
+            <Picker.Item label="TO FAST-NUCES Main Campus" value="TO FAST-NUCES Main Campus" />
+            <Picker.Item label="FROM FAST-NUCES Main Campus" value="FROM FAST-NUCES Main Campus" />
+          </Picker>
 
-        <InputAutocomplete
-          placeholder="Location"
-          onPlaceSelected={(details) => {
-            onPlaceSelected(details, "destination");
-          }}
-        />
-        <TouchableOpacity style={styles.button} onPress={traceRoute}>
-          <Text style={styles.buttonText}>Trace route</Text>
-        </TouchableOpacity>
-        {(distance !== 0 || duration !== 0) && (
-          <View>
-            <Text>Distance: {distance.toFixed(2)} km</Text>
-            <Text>Duration: {Math.ceil(duration)} min</Text>
-          </View>
-        )}
+
         <TouchableOpacity style={styles.button} onPress={addWaypoint}>
           <Text style={styles.buttonText}>Add Waypoint</Text>
         </TouchableOpacity>
-        {waypoints.length > 0 && (
-          <Picker
-            selectedValue={selectedWaypoint}
-            onValueChange={(itemValue) => setSelectedWaypoint(itemValue)}
-            style={styles.picker}
-          >
-            {waypoints.map((waypoint, index) => (
-              <Picker.Item key={index} label={waypoint.name} value={waypoint.name} />
-            ))}
-          </Picker>
-        )}
         {waypoints.map((waypoint, index) => (
           <View key={index} style={styles.waypointContainer}>
             <InputAutocomplete
@@ -297,6 +297,21 @@ const PostRideTwo = ({ route }) => {
             </TouchableOpacity>
           </View>
         ))}
+        <InputAutocomplete
+          placeholder="Location"
+          onPlaceSelected={(details) => {
+            onPlaceSelected(details, "destination");
+          }}
+        />
+        <TouchableOpacity style={styles.button} onPress={traceRoute}>
+          <Text style={styles.buttonText}>Trace route</Text>
+        </TouchableOpacity>
+        {(distance !== 0 || duration !== 0) && (
+          <View>
+            <Text>Distance: {distance.toFixed(2)} km</Text>
+            <Text>Duration: {Math.ceil(duration)} min</Text>
+          </View>
+        )}
         <TouchableOpacity style={styles.button} onPress={postRide}>
           <Text style={styles.buttonText}>Post Ride</Text>
         </TouchableOpacity>
@@ -352,11 +367,6 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     textAlign: "center",
-  },
-  picker: {
-    height: 50,
-    width: '100%',
-    marginBottom: 16,
   },
 });
 
