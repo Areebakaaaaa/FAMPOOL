@@ -5,11 +5,12 @@ const {addRide, bookRide, getAvailableRide, getBookedRide, getDemoLocation} = re
 
 router.post('/post-ride', async (req, res) => {
     console.log('Backend Post Ride Entered.');
-    const postRideDetails = req.body;
-    //getAvailableRide();
+    const postRideDetailsTwo = req.body;
+    //console.log("WayPoints: =>> ", postRideDetailsTwo.waypoints);
+    console.log("Booked Seats: =>> ", postRideDetailsTwo.bookedSeats);
   
     try {
-      const result = await addRide(postRideDetails);
+      const result = await addRide(postRideDetailsTwo);
   
       if(result)
       {
@@ -21,7 +22,8 @@ router.post('/post-ride', async (req, res) => {
     } catch (error) {
       console.error('Error posting ride:', error);
       res.status(500).send({ error: 'Failed to post ride due to an internal error.' });
-    }
+    } 
+
   });
   
   router.post('/book-ride', async (req, res) => {
