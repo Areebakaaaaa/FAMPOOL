@@ -67,6 +67,7 @@ const PostRideTwo = ({ route }) => {
   const [distance, setDistance] = useState(0);
   const [duration, setDuration] = useState(0);
   const [waypoints, setWaypoints] = useState([]);
+  const bookedSeats= 0;
   const mapRef = useRef(null);
 
   const [toFromFast, setToFromFast]= useState('TO FAST-NUCES Main Campus');
@@ -77,6 +78,7 @@ const PostRideTwo = ({ route }) => {
   const fastLongitude=67.2646838;
 
 
+
   let postRideDetailsTwo={
     driverId: postRideDetails.driverId, 
     customerType: postRideDetails.customerType, 
@@ -85,7 +87,7 @@ const PostRideTwo = ({ route }) => {
     amPm: postRideDetails.amPm, 
     date: postRideDetails.date, 
     seats: postRideDetails.seats,
-    origin, destination, distance, duration, waypoints,
+    origin, destination, distance, duration, waypoints, bookedSeats
   }
   const moveTo = async (position) => {
     const camera = await mapRef.current?.getCamera();

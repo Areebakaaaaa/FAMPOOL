@@ -7,6 +7,7 @@ router.post('/post-ride', async (req, res) => {
     console.log('Backend Post Ride Entered.');
     const postRideDetailsTwo = req.body;
     //console.log("WayPoints: =>> ", postRideDetailsTwo.waypoints);
+    console.log("Booked Seats: =>> ", postRideDetailsTwo.bookedSeats);
   
     try {
       const result = await addRide(postRideDetailsTwo);
@@ -21,7 +22,7 @@ router.post('/post-ride', async (req, res) => {
     } catch (error) {
       console.error('Error posting ride:', error);
       res.status(500).send({ error: 'Failed to post ride due to an internal error.' });
-    }
+    } 
 
   });
   

@@ -25,12 +25,26 @@ const AvailableRideDetails = ({route}) => {
 
   const [aaa, setAAA]= useState('');
 
-  const [wayPoint, setWayPoint]=useState();
+  const [waypoint, setWaypoint]=useState();
   
   let bookRideDetails = {
     userId, driverId, aaa, pickUp, dropOff, rideStatus,
 
   }
+
+  useEffect(()=>{
+    //console.log("Abc screen: ",rideDetails.destination);
+    const fetchRides = async () => {
+      console.log("Value going: ", ride.waypoints[1].latitude);
+        /* const val=calculateFareShares(ride.seats,Number(dessssssssssssssssssssssssss));
+        console.log("Fare is: ", val);
+        setFare(val); */
+    };
+
+    fetchRides();
+
+    
+  }, []); 
 
   useEffect(() => {
     setAAA(fare.length > 0 ? fare[fare.length - 1].fareShare.toFixed(2) : '');
@@ -76,12 +90,12 @@ const AvailableRideDetails = ({route}) => {
         </View>
         <View style={styles.rideDetailRow}>
           <Ionicons name="person" size={24} color="#009688" />
-          <Text style={styles.rideDetailText}>Seats: {ride.seats}</Text>
+          <Text style={styles.rideDetailText}>Seats: {ride.bookedSeats}/{ride.seats}</Text>
         </View>
 
         <Picker
-          selectedValue={wayPoint}
-          onValueChange={setWayPoint}
+          selectedValue={waypoint}
+          onValueChange={setWaypoint}
           style={styles.picker}
         >
           {ride.waypoints.map((waypoint, index) => (

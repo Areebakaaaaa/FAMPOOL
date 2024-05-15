@@ -20,6 +20,7 @@ async function addRide(postRideDetailsTwo){
         destination: postRideDetailsTwo.destination,
         distance: postRideDetailsTwo.distance,
         duration: postRideDetailsTwo.duration,
+        bookedSeats: postRideDetailsTwo.bookedSeats,
         waypoints: postRideDetailsTwo.waypoints,
 
       })

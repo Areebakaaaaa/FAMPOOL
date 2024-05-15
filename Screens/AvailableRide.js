@@ -49,7 +49,7 @@ const AvailableRidesScreen = ({ route }) => {
             <Text style={styles.rideLocation}>
               TO:- {item.destination.name}
             </Text>
-            <Text style={styles.rideInfo}>Seats: {item.seats}</Text>
+            <Text style={styles.rideInfo}>Seats: {item.bookedSeats}/{item.seats}</Text>
             <View style={styles.genderCountContainer}>
               <Text style={styles.genderCount}>
                 <Ionicons name="female" size={16} color="#FF00FF" /> 1

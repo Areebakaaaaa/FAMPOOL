@@ -82,48 +82,12 @@ const Abc = ({route}) => {
   
 
 
-  const confirmBooking = async() => {
-    console.log('Ride Booked!.');
-
-    try{
-      const result = await bookingRide(bookRideDetails);
-
-      if(result){
-        Alert.alert("Booking Confirmation", "Ride Booked!", [{ text: "OK", onPress: () => navigation.navigate('RideStatus')}]);
-      }
-      else{
-        Alert.alert("ERROR!. RIDE BOOKING FAILED");
-      }
-
-    }catch(err){
-      console.error(err);
-    }
-  };
+  
 
   return (
     <View style={styles.container}>
       <View style={styles.rideSummaryCard}>
         <Text style={styles.headerText}>Ride Summary</Text>
-        <View style={styles.rideDetailRow}>
-          <Ionicons name="location-sharp" size={24} color="#009688" />
-          <Text style={styles.rideDetailText}>From: {ride.origin}</Text>
-        </View>
-        <View style={styles.rideDetailRow}>
-          <Ionicons name="navigate-circle" size={24} color="#009688" />
-          <Text style={styles.rideDetailText}>To: {ride.destination}</Text>
-        </View>
-        <View style={styles.rideDetailRow}>
-          <Ionicons name="calendar" size={24} color="#009688" />
-          <Text style={styles.rideDetailText}>Date: {ride.date}</Text>
-        </View>
-        <View style={styles.rideDetailRow}>
-          <Ionicons name="time" size={24} color="#009688" />
-          <Text style={styles.rideDetailText}>Time: {ride.hours}</Text>
-        </View>
-        <View style={styles.rideDetailRow}>
-          <Ionicons name="person" size={24} color="#009688" />
-          <Text style={styles.rideDetailText}>Seats: {ride.seats}</Text>
-        </View>
         <View style={styles.rideDetailRow}>
           <Ionicons name="cash" size={24} color="#009688" />
           <Text style={styles.rideDetailText}>Fare: Rs. {fare.length > 0 ? fare[fare.length - 1].fareShare.toFixed(2) : 'Calculating...'}</Text>
