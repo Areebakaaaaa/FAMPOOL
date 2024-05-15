@@ -1,3 +1,4 @@
+import React, { useRef, useState } from "react";
 import MapView, { LatLng, Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import {
   StyleSheet,
@@ -11,8 +12,8 @@ import {
   GooglePlacesAutocomplete,
 } from "react-native-google-places-autocomplete";
 import Constants from "expo-constants";
-import { useRef, useState } from "react";
 import MapViewDirections from "react-native-maps-directions";
+import myApiKey from '../services/config';
 
 const { width, height } = Dimensions.get("window");
 const ASPECT_RATIO = width / height;
@@ -57,6 +58,7 @@ function InputAutocomplete({
 }
 
 export default function App() {
+    const myKey= myApiKey;
   const [origin, setOrigin] = useState<LatLng | null>();
   const [destination, setDestination] = useState<LatLng | null>();
   const [showDirections, setShowDirections] = useState(false);
@@ -193,4 +195,4 @@ const styles = StyleSheet.create({
   buttonText: {
     textAlign: "center",
   },
-});
+}); 

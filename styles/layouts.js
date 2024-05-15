@@ -37,7 +37,7 @@ const styles= StyleSheet.create({
       menuText: {
         fontSize: 18,
         marginLeft: 15,
-        color: '#4CAF50',
+        color: '#00987B',
       },
       logoutButton: {
         backgroundColor: 'white',
@@ -48,10 +48,16 @@ const styles= StyleSheet.create({
       },
       logoutText: {
         fontSize: 18,
-        color: '#4CAF50',
+        color: '#00987B',
         fontWeight: 'bold',
       },
-
+      logo: {
+        width: 150, // Adjust width as necessary
+        height: 150, // Adjust height as necessary
+        resizeMode: 'contain',
+        alignSelf: 'center',
+        marginBottom: 20,
+      },
 })
 
 export default styles;

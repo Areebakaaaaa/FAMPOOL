@@ -194,6 +194,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 20,
+    color: 'white',
     fontWeight: 'bold',
     marginLeft: 20,
   },

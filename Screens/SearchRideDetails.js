@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+/* import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -149,6 +149,149 @@ const SearchRideDetails = () => {
         </View>
       </LinearGradient>
     </ScrollView>
+  );
+};
+
+const styles = StyleSheet.create({
+  scrollView: {
+    flexGrow: 1,
+  },
+  container: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  card: {
+    width: '100%', // Use the full width to ensure it fits on all devices
+    maxWidth: 600, // Maximum width for larger devices
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  header: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#005A4A',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  picker: {
+    width: '100%',
+    marginVertical: 10,
+  },
+  pickerAmPm: {
+    width: 80,
+    marginVertical: 10,
+  },
+  timeContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  timeBox: {
+    flex: 1,
+    marginRight: 10,
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#005A4A',
+    marginBottom: 5,
+  },
+  timeInput: {
+    borderWidth: 1,
+    borderColor: '#ddd',
+    padding: 10,
+    borderRadius: 5,
+    backgroundColor: '#F0F0F0',
+    textAlign: 'center',
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ddd',
+    padding: 10,
+    borderRadius: 5,
+    backgroundColor: '#F0F0F0',
+    marginBottom: 20,
+  },
+  button: {
+    backgroundColor: '#00897B',
+    padding: 15,
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+});
+
+export default SearchRideDetails;
+ */
+
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useNavigation } from '@react-navigation/native';
+import { GooglePlaceDetail, GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import Constants from "expo-constants";
+import configData from '../services/config';
+
+
+function InputAutocomplete({ label, placeholder, onPlaceSelected }) {
+  return (
+    <>
+      <Text>{label}</Text>
+      <GooglePlacesAutocomplete
+        styles={{ textInput: styles.input }}
+        placeholder={placeholder || ""}
+        fetchDetails
+        onPress={(data, details = null) => {
+          onPlaceSelected(details);
+        }}
+        query={{
+          key: configData.myApiKey,
+          language: "en",
+        }}
+      />
+    </>
+  );
+}
+
+const SearchRideDetails = () => {
+  const [origin, setOrigin] = useState(null);
+
+  const onPlaceSelected = (details) => {
+    const position = {
+      latitude: details?.geometry.location.lat || 0,
+      longitude: details?.geometry.location.lng || 0,
+    };
+    setOrigin(position);
+  };
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.searchContainer}>
+      <Text style={styles.header}>Search Ride</Text>
+
+        
+      
+        <InputAutocomplete
+        placeholder="Destination"
+          onPlaceSelected={(details) => { onPlaceSelected(details); }}
+        />
+
+      </View>
+    </View>
+   
   );
 };
 
