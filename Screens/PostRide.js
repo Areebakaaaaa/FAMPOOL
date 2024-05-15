@@ -342,6 +342,7 @@ const PostRide = () => {
 
     navigation.navigate("PostRideTwo", postRideDetails);
 
+    
     /* try {
       const result = await postingRide(postRideDetails);
       result
