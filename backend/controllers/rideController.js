@@ -37,13 +37,21 @@ async function addRide(postRideDetailsTwo){
     const usersCollection = AdminFirestore.collection('bookedRides');
 
     try{
+      const location = bookRideDetails.location || null;
+
       const userDoc = await usersCollection.add({
         userId: bookRideDetails.userId,
         driverId: bookRideDetails.driverId, 
-        fare: bookRideDetails.aaa, 
-        pickUp: bookRideDetails.pickUp, 
-        dropOff: bookRideDetails.dropOff, 
+        fare: bookRideDetails.fare, 
         rideStatus: bookRideDetails.rideStatus,
+        origin: bookRideDetails.origin,
+        destination: bookRideDetails.destination,
+        rideId: bookRideDetails.rideId,
+        date: bookRideDetails.date,
+        location: location,
+        hours: bookRideDetails.hours,
+        minutes: bookRideDetails.minutes,
+        amPm: bookRideDetails.amPm,
       })
 
       console.log("Ride booked successfully with Ride-ID: ",userDoc.id);

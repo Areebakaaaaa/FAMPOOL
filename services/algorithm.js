@@ -1,4 +1,9 @@
+import configData from '../services/config';
+
+
 export const calculateFareShares = (seats, dis) => {
+  const petrolPrice=configData.petrolPrice;
+  console.log("Petrol Price: ", petrolPrice);
 
   // Example usage:
 const numPassengers = 2; // Example value

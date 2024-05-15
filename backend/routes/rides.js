@@ -30,7 +30,9 @@ router.post('/post-ride', async (req, res) => {
     console.log('Backend Book ride entered.');
     const bookRideDetails = req.body;
     //console.log(bookRideDetails.aaa);
-  
+
+    console.log(bookRideDetails);
+
     try{
       const result = await bookRide(bookRideDetails);
       if(result){

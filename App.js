@@ -14,7 +14,6 @@ import Registration from "./Screens/Registration";
 import HomePage from "./Screens/HomePage";
 import AvailableRide from "./Screens/AvailableRide";
 import PostRide from "./Screens/PostRide";
-import PostRideTwo from "./Screens/PostRideTwo";
 import Notification from "./Screens/Notification";
 import MapScreen from './Screens/MapScreen';
 import SearchRide from './Screens/SearchRide';
@@ -23,9 +22,8 @@ import Abc from './Screens/Abc';
 
 
 import RideStatus from './Screens/RideStatus';
-
-import PostRideTwo from './Screens/PostRideTwo';
 import AvailableRideDetails from './Screens/AvailableRideDetails';
+import PostRideTwo from './Screens/PostRideTwo';
 
 
 
@@ -52,7 +50,7 @@ export default function App() {
               component={Login}
               options={{ title: 'Login' , headerShown: false }}
               />
-                 <Stack.Screen
+              <Stack.Screen
               name="PostRideTwo"
               component={PostRideTwo}
               options={{ title: 'PostRideTwo' , headerShown: false }}
@@ -77,7 +75,7 @@ export default function App() {
               component={PostRide}
               options={{ title: 'PostRide' , headerShown: false }}
               />
-                <Stack.Screen
+              <Stack.Screen
               name="Notification"
               component={Notification}
               options={{ title: 'Notification' , headerShown: false }}
@@ -104,12 +102,7 @@ export default function App() {
               component={RideStatus}
               options={{ title: 'RideStatus' , headerShown: false }}
               />
-
-              <Stack.Screen
-              name="PostRideTwo"
-              component={PostRideTwo}
-              options={{ title: 'PostRideTwo' , headerShown: false }}
-              />
+              
               <Stack.Screen
               name="AvailableRideDetails"
               component={AvailableRideDetails}

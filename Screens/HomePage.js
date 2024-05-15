@@ -59,10 +59,11 @@ export default function HomePage() {
               <Text style={styles.menuText}>Ride Status</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("PostRideTwo")}>
-              <Ionicons name="PostRideTwo" size={24} color="#4CAF50" />
-              <Text style={styles.menuText}>PostRideTwo</Text>
+            <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("AvailableRide")}>
+              <Ionicons name="map" size={24} color="#00897B" />
+              <Text style={styles.menuText}>Available Ride</Text>
             </TouchableOpacity>
+
 
 
           </View>
