@@ -39,7 +39,7 @@ export default function HomePage() {
 
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("PostRide")}>
+            <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("PostRideTwo")}>
               <Ionicons name="car" size={24} color="#00897B" />
               <Text style={styles.menuText}>Post Ride</Text>
             </TouchableOpacity>

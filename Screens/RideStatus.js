@@ -347,6 +347,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient'; // Make sure expo-linear-gradient is installed
 import { useNavigation } from '@react-navigation/native';
 import configData from '../services/config';
+import {rideStatusUpdate} from '../services/fampoolAPIs';
 //import styles from '../styles/userRideStatus';
 
 const RideStatus = ({ route }) => {
@@ -392,10 +393,71 @@ const startRide = () => {
   Alert.alert("Starting the Ride!");
 };
 
-const rideAccepted= () =>{
-    const status= 'Accepted';
+const [userId, setUserId] = useState('k201730');
+const [driverId, setDriverId] = useState('k200452');
+const [status, setStatus] = useState('Accepted');
+const [rideId, setRideId] = useState('o17BKpLpz58uSAzxmO8F');
 
-}    
+let rideStatusDetails={
+    userId, driverId, status, rideId
+}
+
+useEffect(() => {
+    console.log("Accepted User ID:", rideStatusDetails.userId);
+    console.log("Accepted Ride ID:", rideStatusDetails.rideId);
+}, [rideStatusDetails.userId, rideStatusDetails.rideId]);
+
+const rideAcceptedButton = async (item) => {
+    // Access the document ID directly from the item
+    const documentId = item.id;
+    console.log("Document ID:", documentId); // Logging the document ID for confirmation
+
+    try {
+        const result = await rideStatusUpdate({
+            userId: item.userId,
+            driverId: item.driverId,
+            rideId: item.rideId,
+            status: 'Accepted',
+            documentId: documentId  // Using the document ID in the API call
+        });
+
+        if(result) {
+            Alert.alert("SUCCESS!", "Ride status updated successfully.");
+        } else {
+            Alert.alert("ERROR!", "Failed to update ride status.");
+        }
+    } catch (err) {
+        console.error(err);
+        Alert.alert("ERROR!", "An error occurred while updating the ride status.");
+    }
+};
+
+const rideDeclineButton = async (item) => {
+    // Access the document ID directly from the item
+    const documentId = item.id;
+    console.log("Document ID:", documentId); // Logging the document ID for confirmation
+
+    try {
+        const result = await rideStatusUpdate({
+            userId: item.userId,
+            driverId: item.driverId,
+            rideId: item.rideId,
+            status: 'Declined',
+            documentId: documentId  // Using the document ID in the API call
+        });
+
+        if(result) {
+            Alert.alert("SUCCESS!", "Ride status updated successfully.");
+        } else {
+            Alert.alert("ERROR!", "Failed to update ride status.");
+        }
+    } catch (err) {
+        console.error(err);
+        Alert.alert("ERROR!", "An error occurred while updating the ride status.");
+    }
+};
+  
+ 
 return (
   <LinearGradient colors={['#00897B', '#00695C', '#004D40']} style={styles.container}>
       <Text style={styles.title}>Driver's Ride Requests</Text>
@@ -415,11 +477,15 @@ return (
                   <Text style={styles.rideDetailText}>To: {item.destination.address}</Text>
                   <Text style={styles.rideDetailText}>Time: {item.hours}:{item.minutes}/{item.amPm}</Text>
                   <View style={styles.buttonContainer}>
-                      <TouchableOpacity style={styles.acceptButton} onPress={(rideAccepted) => handleAccept(item)}>
+                      {/* <TouchableOpacity style={styles.acceptButton} onPress={(rideAcceptedButton) => handleAccept(item)}>
                           <Text style={styles.buttonText}>Accept</Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity style={styles.rejectButton} onPress={() => handleReject(item.id)}>
-                          <Text style={styles.buttonText}>Reject</Text>
+                      </TouchableOpacity> */}
+                      <TouchableOpacity style={styles.acceptButton} onPress={() => rideAcceptedButton(item)}>
+                        <Text style={styles.buttonText}>Accept</Text>
+                    </TouchableOpacity>
+
+                      <TouchableOpacity style={styles.rejectButton} onPress={() => rideDeclineButton(item)}>
+                          <Text style={styles.buttonText}>Decline</Text>
                       </TouchableOpacity>
                   </View>
 
