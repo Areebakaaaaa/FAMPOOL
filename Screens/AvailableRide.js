@@ -3,24 +3,21 @@ import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView } from 
 import { Ionicons } from '@expo/vector-icons';
 import { FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import ipv4 from '../services/config';
+import configData from '../services/config';
 
-const AvailableRidesScreen = ({route}) => {
-  const rideDetails= route.params;
+const AvailableRidesScreen = ({ route }) => {
+  const rideDetails = route.params;
   const navigation = useNavigation();
   const [rides, setRides] = useState([]);
- 
 
-  useEffect(()=>{
-    console.log("Available ride page: ",rideDetails.destination);
-    
+  useEffect(() => {
     const fetchRides = async () => {
-      try{
+      try {
         console.log("Fetching Rides.");
-        const response = await fetch(`${ipv4}:5000/rides/available-rides`);
+        const response = await fetch(`${configData.ipv4}:5000/rides/available-rides`);
         const data = await response.json();
         setRides(data);
-      } catch(err){
+      } catch (err) {
         console.error('Error fetching rides: ', err);
       }
     };
@@ -29,34 +26,39 @@ const AvailableRidesScreen = ({route}) => {
   }, []);
 
   const hojaPlease = (item) => {
-    console.log("Hoja bhaee ma roojaongaaa ab!.");
-    navigation.navigate("Abc", { ride: item, ...rideDetails });
+    console.log("Hoja bhaee ma roojaongaaa ab!.", item.id);
+    navigation.navigate("AvailableRideDetails", { ride: item, ...rideDetails });
   }
-
 
   return (
     <View style={styles.container}>
       <FlatList
         data={rides}
-        keyExtractor={item => item.id.toString()} // Make sure to convert the ID to string if it's not already
+        keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => (
           <View style={styles.rideCard}>
             <Text style={styles.rideDetails}>
-              {item.customerType} - {item.date} - {item.departureTime}
+              {item.customerType}
             </Text>
             <Text style={styles.rideLocation}>
-             {item.toFromFast} - {item.toFromLocation}
+              Departure Time: {item.hours}:{item.minutes} {item.amPm}
             </Text>
-            <Text style={styles.rideInfo}>Seats: {item.seats}</Text>
+            <Text style={styles.rideLocation}>
+              FROM: {item.origin.name}
+            </Text>
+            <Text style={styles.rideLocation}>
+              TO:- {item.destination.name}
+            </Text>
+            <Text style={styles.rideInfo}>Seats: {item.bookedSeats}/{item.seats}</Text>
             <View style={styles.genderCountContainer}>
               <Text style={styles.genderCount}>
-                <Ionicons name="female" size={16} color="#FF00FF" /> {item.femaleCount}
+                <Ionicons name="female" size={16} color="#FF00FF" /> 1
               </Text>
               <Text style={styles.genderCount}>
-                <Ionicons name="male" size={16} color="#0000FF" /> {item.maleCount}
+                <Ionicons name="male" size={16} color="#0000FF" /> 1
               </Text>
             </View>
-            <TouchableOpacity style={styles.bookNowButton} onPress={()=> hojaPlease(item)}>
+            <TouchableOpacity style={styles.bookNowButton} onPress={() => hojaPlease(item)}>
               <Text style={styles.bookNowText}>Book now</Text>
             </TouchableOpacity>
           </View>
@@ -65,7 +67,6 @@ const AvailableRidesScreen = ({route}) => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

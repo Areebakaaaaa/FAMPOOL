@@ -7,15 +7,53 @@ import { Picker } from '@react-native-picker/picker';
 import { LinearGradient } from 'expo-linear-gradient';
 import { postingRide } from '../services/fampoolAPIs';
 import { useNavigation } from '@react-navigation/native';
+import { GooglePlaceDetail, GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import Constants from "expo-constants";
+import configData from '../services/config';
+
+
+const InputAutocomplete = ({
+  label,
+  placeholder,
+  onPlaceSelected,
+}) => {
+  return (
+    <>
+      <Text>{label}</Text>
+      <GooglePlacesAutocomplete
+        styles={{ textInput: styles.input }}
+        placeholder={placeholder || ""}
+        fetchDetails
+        onPress={(data, details = null) => {
+          onPlaceSelected(details);
+        }}
+        query={{
+          key: configData.myApiKey,
+          language: "en",
+        }}
+      />
+    </>
+  );
+};
 
 const PostRide = () => {
-  const [customerType, setCustomerType] = useState('Student');
-  const [hours, setHours] = useState('');
-  const [minutes, setMinutes] = useState('');
-  const [amPm, setAmPm] = useState('');
+
+  const navigation = useNavigation();
+
+  const [customerType, setCustomerType] = useState('No Specification');
   const [date, setDate] = useState('');
   const [seats, setSeats] = useState('');
-  const navigation = useNavigation();
+  const driverId= "k201609";
+
+  const [hours, setHours] = useState('1');
+  const [minutes, setMinutes] = useState('20');
+  const [amPm, setAmPm] = useState('AM');
+
+
+  let postRideDetails={
+    driverId, customerType, hours, minutes, amPm, date, seats,
+  }
+
 
   useEffect(() => {
     const currentDate = new Date();
@@ -25,6 +63,7 @@ const PostRide = () => {
     const formattedDate = `${year}-${month}-${day}`;
     // setDate(formattedDate);
   }, []);
+
 
   const validateAndPostRide = async () => {
     // Check if the date is between 1 and 12 and not negative
@@ -81,24 +120,18 @@ const PostRide = () => {
           <Text style={styles.nextButtonText}>Next</Text>
         </TouchableOpacity>
         <Text style={styles.header}>Post a Ride</Text>
-           <Picker
-          selectedValue={customerType}
-          onValueChange={setCustomerType}
-          style={styles.picker}
-        >
-          <Picker.Item label="Not Specific" value="Not Specific" />
-          <Picker.Item label="Male" value="Male Specific" />
-          <Picker.Item label="Female" value="Female Specific" />
-        </Picker>
+           
 
-        <Picker
-          selectedValue={customerType}
-          onValueChange={setCustomerType}
-          style={styles.picker}
-        >
-          <Picker.Item label="Student" value="Student Specific" />
-          <Picker.Item label="Faculty" value="Faculty Specific" /> 
-        </Picker>
+          <Picker
+            selectedValue={customerType}
+            onValueChange={setCustomerType}
+            style={styles.picker}
+          >
+            <Picker.Item label="No Specification" value="No Specification" />
+            <Picker.Item label="Male Only" value="Male Only" />
+            <Picker.Item label="Female Only" value="Female Only" />
+            <Picker.Item label="Faculty Only" value="Faculty Only" />
+          </Picker>
 
         <View style={styles.timeContainer}>
           <TextInput
@@ -116,6 +149,7 @@ const PostRide = () => {
             style={styles.timeInput}
             keyboardType="numeric"
             maxLength={2}
+
           />
           <TextInput
             placeholder="AM/PM"
@@ -126,12 +160,6 @@ const PostRide = () => {
           />
         </View>
 
-        <TextInput
-          placeholder="Date"
-          onChangeText={setDate}
-          // value={date}
-          style={styles.input}
-        />
 
         <TextInput
           placeholder="Seats"
@@ -140,6 +168,13 @@ const PostRide = () => {
           style={styles.input}
           keyboardType='numeric'
         />
+          <TouchableOpacity
+            style={styles.button}
+            onPress={()=>navigation.navigate('PostRideTwo', postRideDetails)}
+          >
+            <Text style={styles.buttonText}>Next</Text>
+          </TouchableOpacity>
+        </View>
 
       </LinearGradient>
     </TouchableWithoutFeedback>
@@ -205,6 +240,53 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
+  searchContainer: {
+    position: "absolute",
+    width: "90%",
+    backgroundColor: "white",
+    shadowColor: "black",
+    shadowOffset: { width: 2, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 4,
+    elevation: 4,
+    padding: 8,
+    borderRadius: 8,
+    top: Constants.statusBarHeight,
+  },
+
+
+  picker: {
+    width: '100%',
+    marginVertical: 10,
+  },
+  pickerAmPm: {
+    width: 80,
+    marginVertical: 10,
+  },
+  timeContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  timeBox: {
+    flex: 1,
+    marginRight: 10,
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#005A4A',
+    marginBottom: 5,
+  },
+  timeInput: {
+    borderWidth: 1,
+    borderColor: '#ddd',
+    padding: 10,
+    borderRadius: 5,
+    backgroundColor: '#F0F0F0',
+    textAlign: 'center',
+  },
 });
 
 export default PostRide;
+ 

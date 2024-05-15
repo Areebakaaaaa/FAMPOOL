@@ -1,12 +1,12 @@
 import axios from 'axios';
-import ipv4 from './config';
+import configData from './config';
 
 export const addUser = async (userDetails) => {
     try{
         console.log("Before API");
         //console.log("Name: ", userDetails.name, "Rollno: ", userDetails.nuId);
 
-        const res = await axios.post(`${ipv4}:5000/users/add-user`, userDetails)
+        const res = await axios.post(`${configData.ipv4}:5000/users/add-user`, userDetails)
 
         console.log("After API");
 
@@ -21,7 +21,7 @@ export const getUser = async (loginDetails) => {
         console.log("NuID: ", loginDetails.nuEmail);
         console.log("Password: ", loginDetails.password);
 
-        const res = await axios.post(`${ipv4}:5000/users/get-user`, loginDetails);
+        const res = await axios.post(`${configData.ipv4}:5000/users/get-user`, loginDetails);
 
         console.log("Login API exit.");
         return res.data;
@@ -32,10 +32,10 @@ export const getUser = async (loginDetails) => {
     }
 }
 
-export const postingRide= async (postRideDetails) => {
+export const postingRide= async (postRideDetailsTwo) => {
     try{
-        console.log("Posting ride API entered.", postRideDetails.toFromFast);
-        const res = await axios.post(`${ipv4}:5000/rides/post-ride`, postRideDetails);
+        console.log("Posting ride API entered.", postRideDetailsTwo.waypoints);
+        const res = await axios.post(`${configData.ipv4}:5000/rides/post-ride`, postRideDetailsTwo);
         console.log("Post ride API exit.");
         return res.data;
 

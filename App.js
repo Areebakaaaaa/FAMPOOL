@@ -17,8 +17,8 @@ import SearchRideDetails from './Screens/SearchRideDetails';
 import Abc from './Screens/Abc';
 
 import RideStatus from './Screens/RideStatus';
-
-//lalalallala
+import PostRideTwo from './Screens/PostRideTwo';
+import AvailableRideDetails from './Screens/AvailableRideDetails';
 
 
 
@@ -83,6 +83,16 @@ export default function App() {
               name="RideStatus"
               component={RideStatus}
               options={{ title: 'RideStatus' , headerShown: false }}
+              />
+              <Stack.Screen
+              name="PostRideTwo"
+              component={PostRideTwo}
+              options={{ title: 'PostRideTwo' , headerShown: false }}
+              />
+              <Stack.Screen
+              name="AvailableRideDetails"
+              component={AvailableRideDetails}
+              options={{ title: 'AvailableRideDetails' , headerShown: false }}
               />
       </Stack.Navigator>
     </NavigationContainer>
