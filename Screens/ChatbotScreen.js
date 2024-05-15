@@ -55,17 +55,19 @@
 
 // export default ChatbotScreen;
 
-
 import React, { useState, useCallback, useEffect } from 'react';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat';
 import { LinearGradient } from 'expo-linear-gradient';
-import { ImageBackground } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 // Import helper functions and data
 import { exampleQuestions, getResponse } from './chatbotUtils';
 
 const ChatbotScreen = () => {
   const [messages, setMessages] = useState([]);
+  const navigation = useNavigation();
 
   useEffect(() => {
     setMessages([
@@ -99,9 +101,16 @@ const ChatbotScreen = () => {
     }, 1000);
   }, []);
 
+  const handleBackPress = () => {
+    navigation.navigate('HomePage');
+  };
+
   return (
-    <ImageBackground source={require('../assets/Chatbotback1.png')} style={{ flex: 1 }}>
-      <LinearGradient colors={['#00474B', '#00897B']} style={{ flex: 1 }}>
+    <LinearGradient colors={['#00474B', '#00897B']} style={{ flex: 1 }}>
+      <View style={styles.container}>
+        <TouchableOpacity onPress={handleBackPress} style={styles.backButton}>
+          <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
+        </TouchableOpacity>
         <GiftedChat
           messages={messages}
           onSend={messages => onSend(messages)}
@@ -109,9 +118,22 @@ const ChatbotScreen = () => {
             _id: 1,
           }}
         />
-      </LinearGradient>
-    </ImageBackground>
+      </View>
+    </LinearGradient>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    position: 'relative',
+  },
+  backButton: {
+    position: 'absolute',
+    top: 40,
+    left: 20,
+    zIndex: 1,
+  },
+});
 
 export default ChatbotScreen;

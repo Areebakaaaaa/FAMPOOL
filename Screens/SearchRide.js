@@ -128,6 +128,7 @@ import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView } from 
 import { Picker } from '@react-native-picker/picker';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
+//import styles from '../styles/searchridecss';
 
 const SearchRide = () => {
   const navigation = useNavigation();
@@ -181,7 +182,7 @@ const SearchRide = () => {
             style={styles.picker}
           >
             <Picker.Item label="No Specification" value="No Specification" />
-            <Picker.Item label="Male Only" value="Male Only" />
+            <Picker.Item label="Male Only " value="Male Only" />
             <Picker.Item label="Female Only" value="Female Only" />
             <Picker.Item label="Faculty Only" value="Faculty Only" />
           </Picker>
@@ -199,7 +200,7 @@ const SearchRide = () => {
             <View style={styles.timeBox}>
               <Text style={styles.label}>Hour</Text>
               <TextInput
-                placeholder="01"
+                placeholder="Hours"
                 onChangeText={setHours}
                 value={hours}
                 style={styles.timeInput}
@@ -211,7 +212,7 @@ const SearchRide = () => {
             <View style={styles.timeBox}>
               <Text style={styles.label}>Minute</Text>
               <TextInput
-                placeholder="56"
+                placeholder="Minutes"
                 onChangeText={setMinutes}
                 value={minutes}
                 style={styles.timeInput}
@@ -222,24 +223,18 @@ const SearchRide = () => {
 
             <View style={styles.timeBox}>
               <Text style={styles.label}>AM/PM</Text>
-              <Picker
-                selectedValue={amPm}
-                onValueChange={setAmPm}
-                style={[styles.pickerAmPm, { color: 'black' }]} // Set color to black
-              >
-                <Picker.Item label="AM" value="AM" />
-                <Picker.Item label="PM" value="PM" />
-              </Picker>
-            </View>
+              <TextInput
+                placeholder="AM/PM"
+                onChangeText={setAmPm}
+
+                style={styles.timeInput}
+                keyboardType='alphabet'
+               // style={[styles.pickerAmPm, { color: 'black' }]} // Set color to black
+              />
+              </View>
+
           </View>
 
-          {/* <TextInput
-            placeholder="Date"
-            onChangeText={setDate}
-            value={date}
-            style={styles.input}
-            editable={false} // To make it non-editable
-          /> */}
 
           <TextInput
             placeholder="Destination"
@@ -261,6 +256,9 @@ const styles = StyleSheet.create({
   scrollView: {
     flexGrow: 1,
   },
+
+  
+  
   container: {
     flexGrow: 1,
     justifyContent: 'center',

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { LinearGradient } from 'expo-linear-gradient';
 import configData from '../services/config';
 
 const AvailableRidesScreen = ({ route }) => {
@@ -25,59 +25,69 @@ const AvailableRidesScreen = ({ route }) => {
     fetchRides();
   }, []);
 
-  const hojaPlease = (item) => {
-    console.log("Hoja bhaee ma roojaongaaa ab!.", item.id);
+  const handleBooking = (item) => {
+    console.log("Booking ride with ID: ", item.id);
     navigation.navigate("AvailableRideDetails", { ride: item, ...rideDetails });
   }
 
+  const renderRideItem = ({ item }) => (
+    <TouchableOpacity style={styles.rideCard} onPress={() => handleBooking(item)}>
+      <Text style={styles.rideDetails}>Customer Type: {item.customerType}</Text>
+      <Text style={styles.rideLocation}>
+        Departure Time: {item.hours}:{item.minutes} {item.amPm}
+      </Text>
+      <Text style={styles.rideLocation}>FROM: {item.origin.address}</Text>
+      <Text style={styles.rideLocation}>TO: {item.destination.address}</Text>
+      <Text style={styles.rideInfo}>Seats: {item.bookedSeats}/{item.seats}</Text>
+      <View style={styles.genderCountContainer}>
+        <Ionicons name="female" size={24} color="#FF00FF" />
+        <Text style={styles.genderCount}>1</Text>
+        <Ionicons name="male" size={24} color="#0000FF" />
+        <Text style={styles.genderCount}>1</Text>
+      </View>
+      <TouchableOpacity style={styles.bookNowButton} onPress={() => handleBooking(item)}>
+        <Text style={styles.bookNowText}>Book Now</Text>
+      </TouchableOpacity>
+    </TouchableOpacity>
+  );
+
   return (
-    <View style={styles.container}>
+    <LinearGradient colors={['#00474B', '#00897B']} style={styles.container}>
+       <Text style={styles.heading}>Available Rides</Text>
       <FlatList
         data={rides}
         keyExtractor={item => item.id.toString()}
-        renderItem={({ item }) => (
-          <View style={styles.rideCard}>
-            <Text style={styles.rideDetails}>
-              {item.customerType}
-            </Text>
-            <Text style={styles.rideLocation}>
-              Departure Time: {item.hours}:{item.minutes} {item.amPm}
-            </Text>
-            <Text style={styles.rideLocation}>
-              FROM: {item.origin.name}
-            </Text>
-            <Text style={styles.rideLocation}>
-              TO:- {item.destination.name}
-            </Text>
-            <Text style={styles.rideInfo}>Seats: {item.bookedSeats}/{item.seats}</Text>
-            <View style={styles.genderCountContainer}>
-              <Text style={styles.genderCount}>
-                <Ionicons name="female" size={16} color="#FF00FF" /> 1
-              </Text>
-              <Text style={styles.genderCount}>
-                <Ionicons name="male" size={16} color="#0000FF" /> 1
-              </Text>
-            </View>
-            <TouchableOpacity style={styles.bookNowButton} onPress={() => hojaPlease(item)}>
-              <Text style={styles.bookNowText}>Book now</Text>
-            </TouchableOpacity>
-          </View>
-        )}
+        renderItem={renderRideItem}
       />
-    </View>
+    </LinearGradient>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8f8f8',
     padding: 10,
   },
+
+  heading: {
+  fontSize: 24,
+  fontWeight: 'bold',
+  color: '#FFFFFF',
+  textAlign: 'center',
+  marginBottom: 10,
+},
+
+  rideDetails: {
+    fontSize: 15,
+    color: '#FFFFFF', // Change color to white
+    marginBottom: 8,
+  },
+  
   rideCard: {
-    backgroundColor: '#009688',
-    marginVertical: 8,
+    backgroundColor: '#00897B',
+    marginVertical: 5,
     borderRadius: 20,
-    padding: 20,
+    padding: 2,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
@@ -86,47 +96,39 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   rideLocation: {
-    fontSize: 16,
+    fontSize: 15,
     color: '#FFFFFF',
-    marginBottom: 8,
-  },
-  rideCode: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#800080',
+    marginBottom: 5,
   },
   rideInfo: {
-    fontSize: 16,
+    fontSize: 15,
     color: '#FFFFFF',
+    marginBottom: 8,
   },
   genderCountContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: 8,
+    marginVertical: 5,
   },
   genderCount: {
-    fontSize: 16,
+    fontSize: 13,
     fontWeight: 'bold',
-    marginHorizontal: 10,
-  },
-  rideFare: {
-    fontSize: 16,
-    color: '#4B0082',
-    marginBottom: 12,
+    marginHorizontal: 5,
+    color: '#FFFFFF',
   },
   bookNowButton: {
     backgroundColor: '#FFFFFF',
     paddingHorizontal: 30,
     paddingVertical: 10,
     borderRadius: 20,
+    marginTop: 10,
   },
   bookNowText: {
     color: '#009688',
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
   },
-  // Add other styles as needed
 });
 
 export default AvailableRidesScreen;
