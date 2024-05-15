@@ -341,6 +341,7 @@ export default RideStatus;
 
 
 export default RideStatus; */
+
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert, FlatList } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';

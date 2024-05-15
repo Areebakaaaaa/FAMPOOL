@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
   },
   loginButtonText: {
 
-    color: '#86ba90',
+    color: '#00897B',
 
     fontSize: 18,
     fontWeight: 'bold',

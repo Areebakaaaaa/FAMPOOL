@@ -45,7 +45,7 @@ export default function HomePage() {
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("Chatbot")}>
-              <Ionicons name="car-sport" size={24} color="#4CAF50" />
+              <Ionicons name="car-sport" size={24} color="#00897B" />
               <Text style={styles.menuText}>Chatbot</Text>
             </TouchableOpacity>
 
