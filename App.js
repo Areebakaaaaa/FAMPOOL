@@ -9,11 +9,13 @@ import Registration from "./Screens/Registration";
 import HomePage from "./Screens/HomePage";
 import AvailableRide from "./Screens/AvailableRide";
 import PostRide from "./Screens/PostRide";
+import PostRideTwo from "./Screens/PostRideTwo";
 import Notification from "./Screens/Notification";
 import MapScreen from './Screens/MapScreen';
 import SearchRide from './Screens/SearchRide';
 import SearchRideDetails from './Screens/SearchRideDetails';
 import Abc from './Screens/Abc';
+
 
 import RideStatus from './Screens/RideStatus';
 
@@ -38,6 +40,11 @@ export default function App() {
               name="Login"
               component={Login}
               options={{ title: 'Login' , headerShown: false }}
+              />
+                 <Stack.Screen
+              name="PostRideTwo"
+              component={PostRideTwo}
+              options={{ title: 'PostRideTwo' , headerShown: false }}
               />
               <Stack.Screen
               name="Registration"
