@@ -5,22 +5,50 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { postingRide } from '../services/fampoolAPIs';
 import { Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { GooglePlaceDetail, GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import Constants from "expo-constants";
+import configData from '../services/config';
+
+
+const InputAutocomplete = ({
+  label,
+  placeholder,
+  onPlaceSelected,
+}) => {
+  return (
+    <>
+      <Text>{label}</Text>
+      <GooglePlacesAutocomplete
+        styles={{ textInput: styles.input }}
+        placeholder={placeholder || ""}
+        fetchDetails
+        onPress={(data, details = null) => {
+          onPlaceSelected(details);
+        }}
+        query={{
+          key: configData.myApiKey,
+          language: "en",
+        }}
+      />
+    </>
+  );
+};
 
 const PostRide = () => {
   const navigation = useNavigation();
 
-  const [customerType, setCustomerType] = useState('Student');
-  const [gender, setGender] = useState('Male');
-  const [toFromFast, setToFromFast] = useState('TO FAST');
-  const [time, setTime] = useState('');
+  const [customerType, setCustomerType] = useState('No Specification');
   const [date, setDate] = useState('');
   const [seats, setSeats] = useState('');
-  const [toFromLocation, setToFromLocation]= useState('');
-  const loc="North Nazimabad";
-  const driverId= "k201730";
+  const driverId= "k201609";
+
+  const [hours, setHours] = useState('1');
+  const [minutes, setMinutes] = useState('20');
+  const [amPm, setAmPm] = useState('AM');
+
 
   let postRideDetails={
-    driverId, customerType, toFromFast, time, date, seats, toFromLocation
+    driverId, customerType, hours, minutes, amPm, date, seats,
   }
 
   useEffect(() => {
@@ -33,29 +61,6 @@ const PostRide = () => {
     setDate(formattedDate);
   }, []);
 
-  const postRide = async () => {
-    console.log('Ride posted...');
-    console.log({ customerType, toFromFast, time, date, seats, toFromLocation });
-    
-    try{
-      const result = await postingRide(postRideDetails);
-
-      if(result)
-      {
-        Alert.alert("SUCCESS!, Ride Posted Successfully!.");
-        navigation.navigate("HomePage");
-      }
-      else
-      {
-        Alert.alert("ERROR!, Ride Posting Failed!")
-      }
-
-
-    }catch (err)
-    {
-      console.error(err);
-    }
-  };
 
   return (
     <ScrollView contentContainerStyle={styles.scrollView}>
@@ -71,46 +76,49 @@ const PostRide = () => {
             onValueChange={setCustomerType}
             style={styles.picker}
           >
-            <Picker.Item label="Not Specific" value="Not Specific" />
-            <Picker.Item label="Male Specific" value="Male Specific" />
-            <Picker.Item label="Female Specific" value="Female Specific" />
-            <Picker.Item label="Faculty Specific" value="Faculty Specific" />
+            <Picker.Item label="No Specification" value="No Specification" />
+            <Picker.Item label="Male Only" value="Male Only" />
+            <Picker.Item label="Female Only" value="Female Only" />
+            <Picker.Item label="Faculty Only" value="Faculty Only" />
           </Picker>
 
-          {/*
-          <Picker
-            selectedValue={gender}
-            onValueChange={setGender}
-            style={styles.picker}
-          >
-            <Picker.Item label="Male" value="Male Specific" />
-            <Picker.Item label="Female" value="Female Specific" />
-          </Picker>
+          
+          <View style={styles.timeContainer}>
+            <View style={styles.timeBox}>
+              <Text style={styles.label}>Hour</Text>
+              <TextInput
+                onChangeText={setHours}
+                value={hours}
+                style={styles.timeInput}
+                keyboardType="numeric"
+                maxLength={2}
+              />
+            </View>
 
-           <Picker
-            selectedValue={acType}
-            onValueChange={setAcType}
-            style={styles.picker}
-          >
-            <Picker.Item label="AC" value="AC" />
-            <Picker.Item label="Non AC" value="Non AC" />
-          </Picker> */}
+            <View style={styles.timeBox}>
+              <Text style={styles.label}>Minute</Text>
+              <TextInput
+                onChangeText={setMinutes}
+                value={minutes}
+                style={styles.timeInput}
+                keyboardType="numeric"
+                maxLength={2}
+              />
+            </View>
 
-          <Picker
-            selectedValue={toFromFast}
-            onValueChange={setToFromFast}
-            style={styles.picker}
-          >
-            <Picker.Item label="TO FAST" value="TO FAST" />
-            <Picker.Item label="FROM FAST" value="FROM FAST" />
-          </Picker>
+            <View style={styles.timeBox}>
+              <Text style={styles.label}>AM/PM</Text>
+              <Picker
+                selectedValue={amPm}
+                onValueChange={setAmPm}
+                style={[styles.pickerAmPm, { color: 'black' }]} // Set color to black
+              >
+                <Picker.Item label="AM" value="AM" />
+                <Picker.Item label="PM" value="PM" />
+              </Picker>
+            </View>
+          </View>
 
-          <TextInput
-            placeholder="DepartureTime"
-            onChangeText={setTime}
-            value={time}
-            style={styles.input}
-          />
           <TextInput
             placeholder="Date"
             onChangeText={setDate}
@@ -126,18 +134,11 @@ const PostRide = () => {
             style={styles.input}
           />
 
-          <TextInput
-            placeholder="toFromLocation"
-            onChangeText={setToFromLocation}
-            value={toFromLocation}
-            style={styles.input}
-          />
-
           <TouchableOpacity
             style={styles.button}
-            onPress={postRide}
+            onPress={()=>navigation.navigate('PostRideTwo', postRideDetails)}
           >
-            <Text style={styles.buttonText}>Post Ride</Text>
+            <Text style={styles.buttonText}>Next</Text>
           </TouchableOpacity>
         </View>
       </LinearGradient>
@@ -197,6 +198,53 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
+  searchContainer: {
+    position: "absolute",
+    width: "90%",
+    backgroundColor: "white",
+    shadowColor: "black",
+    shadowOffset: { width: 2, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 4,
+    elevation: 4,
+    padding: 8,
+    borderRadius: 8,
+    top: Constants.statusBarHeight,
+  },
+
+
+  picker: {
+    width: '100%',
+    marginVertical: 10,
+  },
+  pickerAmPm: {
+    width: 80,
+    marginVertical: 10,
+  },
+  timeContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  timeBox: {
+    flex: 1,
+    marginRight: 10,
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#005A4A',
+    marginBottom: 5,
+  },
+  timeInput: {
+    borderWidth: 1,
+    borderColor: '#ddd',
+    padding: 10,
+    borderRadius: 5,
+    backgroundColor: '#F0F0F0',
+    textAlign: 'center',
+  },
 });
 
 export default PostRide;
+ 

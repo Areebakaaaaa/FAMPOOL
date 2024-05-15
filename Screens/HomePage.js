@@ -38,6 +38,11 @@ export default function HomePage() {
               <Text style={styles.menuText}>Ride Status</Text>
             </TouchableOpacity>
 
+            <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("MapScreen")}>
+              <Ionicons name="map" size={24} color="#4CAF50" />
+              <Text style={styles.menuText}>Map Screen</Text>
+            </TouchableOpacity>
+
             {/* <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("Notification")}>
               <Ionicons name="notifications" size={24} color="#4CAF50" />
               <Text style={styles.menuText}>Notifications</Text>

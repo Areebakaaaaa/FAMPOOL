@@ -4,10 +4,11 @@ import {calculateFareShares} from '../services/algorithm';
 import { Ionicons } from '@expo/vector-icons';
 import { Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import ipv4 from '../services/config';
+import configData from '../services/config';
 import { bookingRide } from '../services/fampoolAPIs';
+import { Picker } from '@react-native-picker/picker';
 
-const Abc = ({route}) => {
+const AvailableRideDetails = ({route}) => {
   const navigation=useNavigation();
   const ride = route.params.ride;
   const rideDetails= route.params;
@@ -23,65 +24,18 @@ const Abc = ({route}) => {
   const [rideStatus, setRideStatus] = useState('Pending');
 
   const [aaa, setAAA]= useState('');
+
+  const [wayPoint, setWayPoint]=useState();
   
   let bookRideDetails = {
     userId, driverId, aaa, pickUp, dropOff, rideStatus,
 
   }
 
-  
-  useEffect(()=>{
-    console.log("Abc screen: ",rideDetails.destination);
-    const fetchRides = async () => {
-      try{
-        console.log("Fetching Rides.");
-        const response = await fetch(`${ipv4}:5000/rides/demo-location`);
-        const data = await response.json();
-        setRides(data);
-        console.log("From database ",data);
-
-        let des = 0;
-        if (rideDetails.destination === "Malir Halt" && data.length > 0) {
-          des = data[0].locationOne; // Assuming the first item contains the relevant location
-          console.log("Destination fareeha: ", des);
-        }
-        else if (rideDetails.destination === "Malir 15" && data.length > 0) {
-          des = data[0].locationTwo;
-          console.log("Destination fareeha: ", des);
-        }
-        else if (rideDetails.destination === "Qaidabad" && data.length > 0) {
-          des = data[0].locationThree;
-          console.log("Destination fareeha: ", des);
-        }
-        else if (rideDetails.destination === "Drigh Road" && data.length > 0) {
-          des = data[0].locationFour;
-          console.log("Destination fareeha: ", des);
-        }
-        else{
-          console.log("Nothing");
-        }
-
-        console.log("Value going: ",des);
-        const val=calculateFareShares(ride.seats,Number(des));
-        console.log("Fare is: ", val);
-        setFare(val);
-        
-      } catch(err){
-        console.error('Error fetching rides: ', err);
-      }
-    };
-
-    fetchRides();
-
-    
-  }, []); 
-
   useEffect(() => {
     setAAA(fare.length > 0 ? fare[fare.length - 1].fareShare.toFixed(2) : '');
   }, [fare]);
   
-
-
   const confirmBooking = async() => {
     console.log('Ride Booked!.');
 
@@ -106,11 +60,11 @@ const Abc = ({route}) => {
         <Text style={styles.headerText}>Ride Summary</Text>
         <View style={styles.rideDetailRow}>
           <Ionicons name="location-sharp" size={24} color="#009688" />
-          <Text style={styles.rideDetailText}>From: {ride.origin}</Text>
+          <Text style={styles.rideDetailText}>From: {ride.origin.name}</Text>
         </View>
         <View style={styles.rideDetailRow}>
           <Ionicons name="navigate-circle" size={24} color="#009688" />
-          <Text style={styles.rideDetailText}>To: {ride.destination}</Text>
+          <Text style={styles.rideDetailText}>To: {ride.destination.name}</Text>
         </View>
         <View style={styles.rideDetailRow}>
           <Ionicons name="calendar" size={24} color="#009688" />
@@ -124,6 +78,17 @@ const Abc = ({route}) => {
           <Ionicons name="person" size={24} color="#009688" />
           <Text style={styles.rideDetailText}>Seats: {ride.seats}</Text>
         </View>
+
+        <Picker
+          selectedValue={wayPoint}
+          onValueChange={setWayPoint}
+          style={styles.picker}
+        >
+          {ride.waypoints.map((waypoint, index) => (
+            <Picker.Item key={index} label={waypoint.name} value={waypoint.name} />
+          ))}
+        </Picker>
+
         <View style={styles.rideDetailRow}>
           <Ionicons name="cash" size={24} color="#009688" />
           <Text style={styles.rideDetailText}>Fare: Rs. {fare.length > 0 ? fare[fare.length - 1].fareShare.toFixed(2) : 'Calculating...'}</Text>
@@ -185,4 +150,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Abc;
+export default AvailableRideDetails;
