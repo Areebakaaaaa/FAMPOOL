@@ -1,10 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+
 import { Ionicons } from '@expo/vector-icons';
+
+
+import registerNNPushToken from 'native-notify';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
+import ChatbotScreen from "./Screens/ChatbotScreen";
 import Login from "./Screens/Login";
 import Registration from "./Screens/Registration";
 import HomePage from "./Screens/HomePage";
@@ -17,15 +21,28 @@ import SearchRideDetails from './Screens/SearchRideDetails';
 import Abc from './Screens/Abc';
 
 import RideStatus from './Screens/RideStatus';
+
 import PostRideTwo from './Screens/PostRideTwo';
 import AvailableRideDetails from './Screens/AvailableRideDetails';
 
 
 
+import React from 'react';
+import { Provider } from 'react-redux';
+import store from './store';
+
+//lalalallala
+
+
+
+
+
 export default function App() {
+  registerNNPushToken(21285, 'QeCyr7CVa7RYcF0b9VcdEm');
   const Stack = createNativeStackNavigator();
 
   return (
+    <Provider store={store}>
     <NavigationContainer>
       <Stack.Navigator>
               <Stack.Screen
@@ -58,11 +75,7 @@ export default function App() {
               component={Notification}
               options={{ title: 'Notification' , headerShown: false }}
               />
-              <Stack.Screen
-              name="MapScreen"
-              component={MapScreen}
-              options={{ title: 'MapScreen' , headerShown: false }}
-              />
+            
               <Stack.Screen
               name="SearchRide"
               component={SearchRide}
@@ -84,6 +97,7 @@ export default function App() {
               component={RideStatus}
               options={{ title: 'RideStatus' , headerShown: false }}
               />
+
               <Stack.Screen
               name="PostRideTwo"
               component={PostRideTwo}
@@ -94,8 +108,23 @@ export default function App() {
               component={AvailableRideDetails}
               options={{ title: 'AvailableRideDetails' , headerShown: false }}
               />
+
+
+            <Stack.Screen
+              name="MapScreen"
+              component={MapScreen}
+              options={{ title: 'MapScreen' , headerShown: false }}
+              />
+
+
+              <Stack.Screen name="Chatbot" component={ChatbotScreen}
+              options={{ title: 'Chatbot' , headerShown: false }}
+              />
+
+
       </Stack.Navigator>
     </NavigationContainer>
+    </Provider>
   );
 }
 
