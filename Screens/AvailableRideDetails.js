@@ -74,40 +74,57 @@ const AvailableRideDetails = ({route}) => {
         <Text style={styles.headerText}>Ride Summary</Text>
         <View style={styles.rideDetailRow}>
           <Ionicons name="location-sharp" size={24} color="#009688" />
-          <Text style={styles.rideDetailText}>From: {ride.origin.name}</Text>
+          <View style={styles.detailTextContainer}>
+            <Text style={styles.detailTextTitle}>From:</Text>
+            <Text style={styles.rideDetailText}>{ride.origin.name}</Text>
+          </View>
         </View>
         <View style={styles.rideDetailRow}>
           <Ionicons name="navigate-circle" size={24} color="#009688" />
-          <Text style={styles.rideDetailText}>To: {ride.destination.name}</Text>
+          <View style={styles.detailTextContainer}>
+            <Text style={styles.detailTextTitle}>To:</Text>
+            <Text style={styles.rideDetailText}>{ride.destination.name}</Text>
+          </View>
         </View>
         <View style={styles.rideDetailRow}>
           <Ionicons name="calendar" size={24} color="#009688" />
-          <Text style={styles.rideDetailText}>Date: {ride.date}</Text>
+          <View style={styles.detailTextContainer}>
+            <Text style={styles.detailTextTitle}>Date:</Text>
+            <Text style={styles.rideDetailText}>{ride.date}</Text>
+          </View>
         </View>
         <View style={styles.rideDetailRow}>
           <Ionicons name="time" size={24} color="#009688" />
-          <Text style={styles.rideDetailText}>Time: {ride.hours}</Text>
+          <View style={styles.detailTextContainer}>
+            <Text style={styles.detailTextTitle}>Time:</Text>
+            <Text style={styles.rideDetailText}>{ride.hours}</Text>
+          </View>
         </View>
         <View style={styles.rideDetailRow}>
           <Ionicons name="person" size={24} color="#009688" />
-          <Text style={styles.rideDetailText}>Seats: {ride.bookedSeats}/{ride.seats}</Text>
+          <View style={styles.detailTextContainer}>
+            <Text style={styles.detailTextTitle}>Seats:</Text>
+            <Text style={styles.rideDetailText}>{ride.bookedSeats}/{ride.seats}</Text>
+          </View>
         </View>
-{ride.waypoints.length > 0 && (
-        <Picker
-          selectedValue={waypoint}
-          onValueChange={setWaypoint}
-          style={styles.picker}
-        >
-          {ride.waypoints.map((waypoint, index) => (
-            <Picker.Item key={index} label={waypoint.name} value={waypoint.name} />
-          ))}
-        </Picker>
-)}
+        {ride.waypoints.length > 0 && (
+          <Picker
+            selectedValue={waypoint}
+            onValueChange={setWaypoint}
+            style={styles.picker}
+          >
+            {ride.waypoints.map((waypoint, index) => (
+              <Picker.Item key={index} label={waypoint.name} value={waypoint.name} />
+            ))}
+          </Picker>
+        )}
 
         <View style={styles.rideDetailRow}>
           <Ionicons name="cash" size={24} color="#009688" />
-          <Text style={styles.rideDetailText}>Fare: Rs. {fare.length > 0 ? fare[fare.length - 1].fareShare.toFixed(2) : 'Calculating...'}</Text>
-  
+          <View style={styles.detailTextContainer}>
+            <Text style={styles.detailTextTitle}>Fare:</Text>
+            <Text style={styles.rideDetailText}>Rs. {fare.length > 0 ? fare[fare.length - 1].fareShare.toFixed(2) : 'Calculating...'}</Text>
+          </View>
         </View>
         <TouchableOpacity style={styles.confirmButton} onPress={confirmBooking}>
           <Text style={styles.confirmButtonText}>Confirm Booking</Text>
@@ -117,13 +134,12 @@ const AvailableRideDetails = ({route}) => {
   );
 };
 
-    
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     padding: 16,
-    backgroundColor: '#ecf0f1',
+    backgroundColor: '#00897B',
   },
   rideSummaryCard: {
     backgroundColor: 'white',
@@ -147,9 +163,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 10,
   },
+  detailTextContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  detailTextTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginRight: 5,
+  },
   rideDetailText: {
     fontSize: 18,
-    marginLeft: 10,
   },
   confirmButton: {
     backgroundColor: '#009688',
