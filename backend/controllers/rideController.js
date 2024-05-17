@@ -40,10 +40,16 @@ async function addRide(postRideDetailsTwo){
       const userDoc = await usersCollection.add({
         userId: bookRideDetails.userId,
         driverId: bookRideDetails.driverId, 
-        fare: bookRideDetails.aaa, 
-        pickUp: bookRideDetails.pickUp, 
-        dropOff: bookRideDetails.dropOff, 
+        fare: bookRideDetails.fare, 
+        waypoint: bookRideDetails.waypoint, 
         rideStatus: bookRideDetails.rideStatus,
+        rideId:bookRideDetails.rideId,
+        hours: bookRideDetails.hours,
+        minutes: bookRideDetails.minutes,
+        amPm: bookRideDetails.amPm,
+        origin: bookRideDetails.origin,
+        destination: bookRideDetails.destination,
+        date: "16/05/2024",
       })
 
       console.log("Ride booked successfully with Ride-ID: ",userDoc.id);

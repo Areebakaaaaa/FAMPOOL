@@ -54,8 +54,8 @@ export const getAvailableRides = async() => {
 
 export const bookingRide= async(bookRideDetails) => {
     try{
-        console.log("Book ride API entered.", bookRideDetails.aaa);
-        const response = await axios.post(`${ipv4}:5000/rides/book-ride`,bookRideDetails);
+        console.log("Book ride API entered.", bookRideDetails.location);
+        const response = await axios.post(`${configData.ipv4}:5000/rides/book-ride`,bookRideDetails);
         console.log("Book ride API exit.");
         return response.data;
     }catch(err){

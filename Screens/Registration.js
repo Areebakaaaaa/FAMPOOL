@@ -115,9 +115,9 @@ export default Registration = () => {
                 <Text style={styles.heading}>Registration</Text>
             </View>
             <View style={styles.formContainer}>
-                <TouchableOpacity style={styles.registerButton} onPress={selectImage}>
+                {/* <TouchableOpacity style={styles.registerButton} onPress={selectImage}>
                     <Text style={styles.registerButtonText}>Select Profile Picture</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
 
                 <Text style={styles.label}>User-Type</Text>
                 <Picker

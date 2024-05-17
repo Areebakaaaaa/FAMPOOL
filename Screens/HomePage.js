@@ -7,7 +7,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import styles from '../styles/layouts';
 
-export default function HomePage() {
+export default function HomePage({route}) {
   const navigation = useNavigation();
   
   return (
@@ -27,11 +27,10 @@ export default function HomePage() {
           
           <View style={styles.menu}>
 
-          <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("Profile")}>
-              {/* </TouchableOpacity><</View>Ionicons name="user" size={24} color="#00987B" /> */}
+          {/* <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("Profile")}>
               <FontAwesome name="user" size={24} color="#00987B" />
               <Text style={styles.menuText}>Profile</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
             <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("SearchRide")}>
               <Ionicons name="search" size={24} color="#00987B" />
@@ -39,20 +38,20 @@ export default function HomePage() {
 
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("PostRideTwo")}>
+            <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("PostRide")}>
               <Ionicons name="car" size={24} color="#00897B" />
               <Text style={styles.menuText}>Post Ride</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("Chatbot")}>
-              <Ionicons name="car-sport" size={24} color="#4CAF50" />
+              <Ionicons name="car-sport" size={24} color="#00897B" />
               <Text style={styles.menuText}>Chatbot</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("Notification")}>
+           {/*  <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("Notification")}>
               <Ionicons name="notifications" size={24} color="#00897B" />
               <Text style={styles.menuText}>Notifications</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
             <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("RideStatus")}>
               <Ionicons name="map" size={24} color="#00897B" />

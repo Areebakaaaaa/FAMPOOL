@@ -26,28 +26,63 @@ const AvailableRideDetails = ({route}) => {
   const [aaa, setAAA]= useState('');
 
   const [waypoint, setWaypoint]=useState(null);
+  const [location, setLocation]=useState(null);
+  const [lastFare, setLastFare]=useState(null);
   
-  let bookRideDetails = {
+  let RideFareDetails = {
     totalDistance: ride.distance,
-    bookedSeats: ride.bookedSeats,
+    bookedSeats: 2,
   }
 
-  const testing =()=>{
+  useEffect(() => {
+    if (fare && fare.length > 0) {
+        const lastFareValue = fare[fare.length - 1].fareShare.toFixed(2);
+        setLastFare(lastFareValue);
+        console.log("Last Fare: ", lastFareValue);
+    }
+}, [fare]);  // Dependency array includes fare to trigger effect when fare changes
+
+
+  const testing = () => {
     console.log("Value going: ", waypoint);
     console.log("Distance: ", waypoint.distance);
-    console.log("Total INFORMATION: ", bookRideDetails)
+    console.log("Total INFORMATION: ", RideFareDetails);
 
-    const val=calculateFareShares(bookRideDetails, waypoint.distance);
+    const val = calculateFareShares(RideFareDetails, waypoint.distance);
     console.log("Fare is: ", val);
-    setFare(val);
+    setFare(val);  // Assuming val is an array with objects containing fareShare
 
+    // We need to check if 'fare' is not just defined, but also has elements before accessing
+    const lastFare = fare && fare.length > 0 ? fare[fare.length - 1].fareShare.toFixed(2) : "0.00";
+    setLastFare(lastFare);
+}
+
+
+  const calculateFareButton=()=>{
+    console.log('Fare Calculation!.');
+    testing();
   }
+
+    let bookRideDetails={
+      userId: "k201730",
+      driverId: ride.driverId,
+      rideId: ride.id,
+      hours: ride.hours,
+      minutes: ride.minutes,
+      amPm: ride.amPm,
+      origin: ride.origin,
+      destination: ride.destination,
+      waypoint,
+      date: "16/05/2024",
+      fare: lastFare,
+      rideStatus: "Pending",
+    }
   
   const confirmBooking = async() => {
-    console.log('Ride Booked!.');
     testing();
+    console.log('Ride Booked!. ================================>', ride.id);
 
-    /* try{
+    try{
       const result = await bookingRide(bookRideDetails);
 
       if(result){
@@ -59,7 +94,7 @@ const AvailableRideDetails = ({route}) => {
 
     }catch(err){
       console.error(err);
-    } */
+    }
   };
 
   return (
@@ -107,6 +142,7 @@ const AvailableRideDetails = ({route}) => {
           onValueChange={(itemValue, itemIndex) => {
               // Assuming each waypoint object has a 'name' and 'distance' and is fully represented in ride.waypoints
               setWaypoint(ride.waypoints[itemIndex]);
+              setLocation(waypoint);
           }}
           style={styles.picker}
         >
@@ -123,7 +159,11 @@ const AvailableRideDetails = ({route}) => {
             <Text style={styles.detailTextTitle}>Fare:</Text>
             <Text style={styles.rideDetailText}>Rs. {fare.length > 0 ? fare[fare.length - 1].fareShare.toFixed(2) : 'Calculating...'}</Text>
           </View>
+          
         </View>
+        <TouchableOpacity style={styles.confirmButton} onPress={calculateFareButton}>
+          <Text style={styles.confirmButtonText}>Calculate Fare</Text>
+        </TouchableOpacity>
         <TouchableOpacity style={styles.confirmButton} onPress={confirmBooking}>
           <Text style={styles.confirmButtonText}>Confirm Booking</Text>
         </TouchableOpacity>

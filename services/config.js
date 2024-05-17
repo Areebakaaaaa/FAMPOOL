@@ -1,6 +1,6 @@
 
 const ipv4='http://192.168.123.69'
-const myApiKey='AIzaSyAdzroihH6uXiye_A-1Q8EKa7GTz2Sgdpk'
+const myApiKey='AIzaSyCqr71jGT7ZbHV2HhRHDi08odTmqFhNxOo'
 const mileage=18;
 const petrolPrice=300;
 
