@@ -25,33 +25,62 @@ const AvailableRideDetails = ({route}) => {
 
   const [aaa, setAAA]= useState('');
 
-  const [waypoint, setWaypoint]=useState();
+  const [waypoint, setWaypoint]=useState(null);
+  const [location, setLocation]=useState(null);
+  const [lastFare, setLastFare]=useState(null);
   
-  let bookRideDetails = {
-    userId, driverId, aaa, pickUp, dropOff, rideStatus,
-
+  let RideFareDetails = {
+    totalDistance: ride.distance,
+    bookedSeats: 2,
   }
 
-  useEffect(()=>{
-    //console.log("Abc screen: ",rideDetails.destination);
-    const fetchRides = async () => {
-      console.log("Value going: ", ride.waypoints[1].latitude);
-        /* const val=calculateFareShares(ride.seats,Number(dessssssssssssssssssssssssss));
-        console.log("Fare is: ", val);
-        setFare(val); */
-    };
-
-    fetchRides();
-
-    
-  }, []); 
-
   useEffect(() => {
-    setAAA(fare.length > 0 ? fare[fare.length - 1].fareShare.toFixed(2) : '');
-  }, [fare]);
+    if (fare && fare.length > 0) {
+        const lastFareValue = fare[fare.length - 1].fareShare.toFixed(2);
+        setLastFare(lastFareValue);
+        console.log("Last Fare: ", lastFareValue);
+    }
+}, [fare]);  // Dependency array includes fare to trigger effect when fare changes
+
+
+  const testing = () => {
+    console.log("Value going: ", waypoint);
+    console.log("Distance: ", waypoint.distance);
+    console.log("Total INFORMATION: ", RideFareDetails);
+
+    const val = calculateFareShares(RideFareDetails, waypoint.distance);
+    console.log("Fare is: ", val);
+    setFare(val);  // Assuming val is an array with objects containing fareShare
+
+    // We need to check if 'fare' is not just defined, but also has elements before accessing
+    const lastFare = fare && fare.length > 0 ? fare[fare.length - 1].fareShare.toFixed(2) : "0.00";
+    setLastFare(lastFare);
+}
+
+
+  const calculateFareButton=()=>{
+    console.log('Fare Calculation!.');
+    testing();
+  }
+
+    let bookRideDetails={
+      userId: "k201730",
+      driverId: ride.driverId,
+      rideId: ride.id,
+      hours: ride.hours,
+      minutes: ride.minutes,
+      amPm: ride.amPm,
+      origin: ride.origin,
+      destination: ride.destination,
+      waypoint,
+      date: "16/05/2024",
+      fare: lastFare,
+      rideStatus: "Pending",
+    }
   
   const confirmBooking = async() => {
-    console.log('Ride Booked!.');
+    testing();
+    console.log('Ride Booked!. ================================>', ride.id);
 
     try{
       const result = await bookingRide(bookRideDetails);
@@ -74,41 +103,67 @@ const AvailableRideDetails = ({route}) => {
         <Text style={styles.headerText}>Ride Summary</Text>
         <View style={styles.rideDetailRow}>
           <Ionicons name="location-sharp" size={24} color="#009688" />
-          <Text style={styles.rideDetailText}>From: {ride.origin.name}</Text>
+          <View style={styles.detailTextContainer}>
+            <Text style={styles.detailTextTitle}>From:</Text>
+            <Text style={styles.rideDetailText}>{ride.origin.name}</Text>
+          </View>
         </View>
         <View style={styles.rideDetailRow}>
           <Ionicons name="navigate-circle" size={24} color="#009688" />
-          <Text style={styles.rideDetailText}>To: {ride.destination.name}</Text>
+          <View style={styles.detailTextContainer}>
+            <Text style={styles.detailTextTitle}>To:</Text>
+            <Text style={styles.rideDetailText}>{ride.destination.name}</Text>
+          </View>
         </View>
         <View style={styles.rideDetailRow}>
           <Ionicons name="calendar" size={24} color="#009688" />
-          <Text style={styles.rideDetailText}>Date: {ride.date}</Text>
+          <View style={styles.detailTextContainer}>
+            <Text style={styles.detailTextTitle}>Date:</Text>
+            <Text style={styles.rideDetailText}>{ride.date}</Text>
+          </View>
         </View>
         <View style={styles.rideDetailRow}>
           <Ionicons name="time" size={24} color="#009688" />
-          <Text style={styles.rideDetailText}>Time: {ride.hours}</Text>
+          <View style={styles.detailTextContainer}>
+            <Text style={styles.detailTextTitle}>Time:</Text>
+            <Text style={styles.rideDetailText}>{ride.hours}:{ride.minutes} {ride.amPm}</Text>
+          </View>
         </View>
-        <View style={styles.rideDetailRow}>
+        {/* <View style={styles.rideDetailRow}>
           <Ionicons name="person" size={24} color="#009688" />
-          <Text style={styles.rideDetailText}>Seats: {ride.bookedSeats}/{ride.seats}</Text>
-        </View>
-{ride.waypoints.length > 0 && (
-        <Picker
-          selectedValue={waypoint}
-          onValueChange={setWaypoint}
+          <View style={styles.detailTextContainer}>
+            <Text style={styles.detailTextTitle}>Seats:</Text>
+            <Text style={styles.rideDetailText}>{ride.bookedSeats}/{ride.seats}</Text>
+          </View>
+        </View> */}
+        {ride.waypoints.length > 0 && (
+          <Picker
+          selectedValue={waypoint ? waypoint.name : null}
+          onValueChange={(itemValue, itemIndex) => {
+              // Assuming each waypoint object has a 'name' and 'distance' and is fully represented in ride.waypoints
+              setWaypoint(ride.waypoints[itemIndex]);
+              setLocation(waypoint);
+          }}
           style={styles.picker}
         >
           {ride.waypoints.map((waypoint, index) => (
             <Picker.Item key={index} label={waypoint.name} value={waypoint.name} />
           ))}
         </Picker>
-)}
+        
+        )}
 
         <View style={styles.rideDetailRow}>
           <Ionicons name="cash" size={24} color="#009688" />
-          <Text style={styles.rideDetailText}>Fare: Rs. {fare.length > 0 ? fare[fare.length - 1].fareShare.toFixed(2) : 'Calculating...'}</Text>
-  
+          <View style={styles.detailTextContainer}>
+            <Text style={styles.detailTextTitle}>Fare:</Text>
+            <Text style={styles.rideDetailText}>Rs. {fare.length > 0 ? fare[fare.length - 1].fareShare.toFixed(2) : 'Calculating...'}</Text>
+          </View>
+          
         </View>
+        <TouchableOpacity style={styles.confirmButton} onPress={calculateFareButton}>
+          <Text style={styles.confirmButtonText}>Calculate Fare</Text>
+        </TouchableOpacity>
         <TouchableOpacity style={styles.confirmButton} onPress={confirmBooking}>
           <Text style={styles.confirmButtonText}>Confirm Booking</Text>
         </TouchableOpacity>
@@ -117,13 +172,12 @@ const AvailableRideDetails = ({route}) => {
   );
 };
 
-    
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     padding: 16,
-    backgroundColor: '#ecf0f1',
+    backgroundColor: '#00897B',
   },
   rideSummaryCard: {
     backgroundColor: 'white',
@@ -147,9 +201,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 10,
   },
+  detailTextContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  detailTextTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginRight: 5,
+  },
   rideDetailText: {
     fontSize: 18,
-    marginLeft: 10,
   },
   confirmButton: {
     backgroundColor: '#009688',

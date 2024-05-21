@@ -64,9 +64,9 @@ const Login = () => {
             onChangeText={setPassword} secureTextEntry={true} />
 
         </View>
-        <TouchableOpacity style={styles.forgotPasswordContainer} onPress={() => alert("Logged In")}>
+        {/* <TouchableOpacity style={styles.forgotPasswordContainer} onPress={() => alert("Logged In")}>
           <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <TouchableOpacity style={styles.loginButton} onPress={LoginProcess}>
           <Text style={styles.loginButtonText}>Login</Text>
         </TouchableOpacity>

@@ -40,10 +40,16 @@ async function addRide(postRideDetailsTwo){
       const userDoc = await usersCollection.add({
         userId: bookRideDetails.userId,
         driverId: bookRideDetails.driverId, 
-        fare: bookRideDetails.aaa, 
-        pickUp: bookRideDetails.pickUp, 
-        dropOff: bookRideDetails.dropOff, 
+        fare: bookRideDetails.fare, 
+        waypoint: bookRideDetails.waypoint, 
         rideStatus: bookRideDetails.rideStatus,
+        rideId:bookRideDetails.rideId,
+        hours: bookRideDetails.hours,
+        minutes: bookRideDetails.minutes,
+        amPm: bookRideDetails.amPm,
+        origin: bookRideDetails.origin,
+        destination: bookRideDetails.destination,
+        date: "16/05/2024",
       })
 
       console.log("Ride booked successfully with Ride-ID: ",userDoc.id);
@@ -87,6 +93,50 @@ async function addRide(postRideDetailsTwo){
     }
   }
 
+  const updateRideStatus = async (rideStatusDetails) => {
+    try {
+        const { userId, rideId, driverId, status } = rideStatusDetails;
+        const bookedRideCollection = AdminFirestore.collection('bookedRides');
+        const availableRidesCollection = AdminFirestore.collection('availableRides');
+
+        // Query for booked ride
+        const snapshot = await bookedRideCollection
+            .where('userId', '==', userId)
+            .where('driverId', '==', driverId)
+            .where('rideId', '==', rideId)
+            .get();
+
+        // Query for available ride
+        const snapshotTwo = await availableRidesCollection.where('rideId', '==', rideId).get();
+    
+        if (snapshot.empty) {
+            console.log('No matching documents in bookedRides.');
+            return false;
+        } else {
+            console.log('Match Found in bookedRides.');
+            const updates = snapshot.docs.map(doc => doc.ref.update({ rideStatus: status }));
+            await Promise.all(updates);
+
+            // Update availableRides if status is 'Accepted'
+            if (status === 'Accepted') {
+                console.log('Updating bookedSeats in availableRides.');
+                const seatUpdates = snapshotTwo.docs.map(doc => {
+                    const currentSeats = doc.data().bookedSeats; // Fetch current bookedSeats value
+                    console.log("currentSeats: ", currentSeats);
+                    return doc.ref.update({ bookedSeats: currentSeats + 1 }); // Increment and update
+                });
+                await Promise.all(seatUpdates);
+                console.log('bookedSeats updated successfully.');
+            }
+
+            return true;
+        }
+        
+    } catch (err) {
+        console.error('Error updating ride status:', err);
+        throw err;  // Propagate the error to the caller
+    }
+};
 
 
   const getDemoLocation = async (req, res) =>{
@@ -106,4 +156,4 @@ async function addRide(postRideDetailsTwo){
     };
   }
   
-  module.exports = ({addRide, bookRide, getAvailableRide, getBookedRide, getDemoLocation});
+  module.exports = ({addRide, bookRide, getAvailableRide, getBookedRide, updateRideStatus, getDemoLocation});

@@ -5,14 +5,15 @@ import {
   Dimensions,
   Text,
   TouchableOpacity,
+  Alert,
 } from "react-native";
-import {
-  GooglePlacesAutocomplete,
-} from "react-native-google-places-autocomplete";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import Constants from "expo-constants";
 import { useRef, useState } from "react";
 import MapViewDirections from "react-native-maps-directions";
 import haversine from 'haversine';
+import { useNavigation } from '@react-navigation/native';
+import { postingRide } from '../services/fampoolAPIs'; // Make sure to adjust this import to your actual API service
 
 const { width, height } = Dimensions.get("window");
 const ASPECT_RATIO = width / height;
@@ -56,7 +57,9 @@ function InputAutocomplete({ label, placeholder, onPlaceSelected }) {
   );
 }
 
-export default function App() {
+const PostRideTwo = ({ route }) => {
+  const postRideDetails = route.params;
+  const navigation = useNavigation();
   const [origin, setOrigin] = useState(null);
   const [destination, setDestination] = useState(null);
   const [waypoints, setWaypoints] = useState([]);
@@ -67,6 +70,7 @@ export default function App() {
   const [waypointDurations, setWaypointDurations] = useState([]);
   const [routeCoordinates, setRouteCoordinates] = useState([]);
   const mapRef = useRef(null);
+  const bookedSeats = 0;
 
   const moveTo = async (position) => {
     const camera = await mapRef.current?.getCamera();
@@ -74,6 +78,27 @@ export default function App() {
       camera.center = position;
       mapRef.current?.animateCamera(camera, { duration: 1000 });
     }
+  };
+
+  const postRideDetailsTwo = {
+    driverId: postRideDetails.driverId,
+    customerType: postRideDetails.customerType,
+    hours: postRideDetails.hours,
+    minutes: postRideDetails.minutes,
+    amPm: postRideDetails.amPm,
+    date: "05/11/2024",
+    seats: postRideDetails.seats,
+    origin,
+    destination,
+    distance,
+    duration,
+    bookedSeats,
+    waypoints: waypoints.map((wp, index) => ({
+      ...wp,
+      distance: waypointDistances[index],
+      duration: waypointDurations[index],
+    })),
+    //Date: 2024/05/16, 
   };
 
   const edgePaddingValue = 70;
@@ -118,6 +143,8 @@ export default function App() {
     const position = {
       latitude: details?.geometry.location.lat || 0,
       longitude: details?.geometry.location.lng || 0,
+      address: details?.formatted_address || '',
+      name: details?.name || '',
     };
 
     if (flag === "origin") {
@@ -150,6 +177,23 @@ export default function App() {
   const setFastAsDestination = () => {
     setDestination(FAST_COORDINATES);
     moveTo(FAST_COORDINATES);
+  };
+
+  const postRide = async () => {
+    console.log('Ride posted with details:', postRideDetailsTwo);
+
+    try {
+      const result = await postingRide(postRideDetailsTwo);
+
+      if (result) {
+        Alert.alert("SUCCESS!, Ride Posted Successfully!.");
+        navigation.navigate("HomePage");
+      } else {
+        Alert.alert("ERROR!, Ride Posting Failed!");
+      }
+    } catch (err) {
+      console.error('Error posting ride:', err);
+    }
   };
 
   return (
@@ -204,12 +248,6 @@ export default function App() {
                 onPlaceSelected(details, "destination");
               }}
             />
-            <TouchableOpacity style={styles.button} onPress={setFastAsOrigin}>
-              <Text style={styles.buttonText}>Set FAST as Origin</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={setFastAsDestination}>
-              <Text style={styles.buttonText}>Set FAST as Destination</Text>
-            </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={() => { if (origin && destination) setRouteReady(true); }}>
               <Text style={styles.buttonText}>Trace route</Text>
             </TouchableOpacity>
@@ -238,6 +276,9 @@ export default function App() {
                 <Text>Waypoint {index + 1} Duration: {Math.ceil(waypointDurations[index])} min</Text>
               </View>
             ))}
+            <TouchableOpacity style={styles.postRideButton} onPress={postRide}>
+              <Text style={styles.buttonText}>Post Ride</Text>
+            </TouchableOpacity>
           </>
         )}
       </View>
@@ -282,5 +323,12 @@ const styles = StyleSheet.create({
   buttonText: {
     textAlign: "center",
   },
+  postRideButton: {
+    backgroundColor: "#4CAF50",
+    paddingVertical: 12,
+    marginTop: 16,
+    borderRadius: 4,
+  },
 });
 
+export default PostRideTwo;

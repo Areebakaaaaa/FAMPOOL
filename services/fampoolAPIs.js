@@ -54,12 +54,25 @@ export const getAvailableRides = async() => {
 
 export const bookingRide= async(bookRideDetails) => {
     try{
-        console.log("Book ride API entered.", bookRideDetails.aaa);
-        const response = await axios.post(`${ipv4}:5000/rides/book-ride`,bookRideDetails);
+        console.log("Book ride API entered.", bookRideDetails.location);
+        const response = await axios.post(`${configData.ipv4}:5000/rides/book-ride`,bookRideDetails);
         console.log("Book ride API exit.");
         return response.data;
     }catch(err){
         console.error(err);
+    }
+}
+
+export const rideStatusUpdate= async (rideStatusDetails) => {
+    try{
+        console.log("Ya Ride ha  =>> ", rideStatusDetails.rideId);
+        const res = await axios.post(`${configData.ipv4}:5000/rides/update-rideStatus`, rideStatusDetails);
+        console.log("Update ride status API exit.");
+        return res.data;
+
+    }catch(err)
+    {
+        console.log(err);
     }
 }
 

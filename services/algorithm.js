@@ -1,10 +1,18 @@
-export const calculateFareShares = (seats, dis) => {
+import { mileage, petrolPrice } from "./config";
+
+export const calculateFareShares = (bookRideDetails, dis) => {
+  const seats = bookRideDetails.bookedSeats;
+  const totalDistance = bookRideDetails.totalDistance;
+  const numPassengers = bookRideDetails.bookedSeats;
+ 
 
   // Example usage:
-const numPassengers = 2; // Example value
+//const numPassengers = 2; // Example value
 //const totalDistance = 18; // Example value
 const distances = [10, 18, 16]; // Example distances
-const totalFare = 540; // Example fare
+
+const TotalPriceformula = (totalDistance*petrolPrice)/mileage;
+const TotalFare=TotalPriceformula+100;
 
 let totalPassengerDistance = 0;
 
@@ -23,7 +31,7 @@ let totalPassengerDistance = 0;
       let passenger = {
           name: `Passenger ${i + 1}`,
           distance: distances[i],
-          fareShare: (distances[i] / totalPassengerDistance) * totalFare
+          fareShare: (distances[i] / totalPassengerDistance) * TotalFare
       };
       passengers.push(passenger);
   }
@@ -31,7 +39,7 @@ let totalPassengerDistance = 0;
   console.log("Value of i: ", i);
   let extra = {
     name: `Passenger ${i + 1}`,
-    fareShare: (dis / totalPassengerDistance) * totalFare
+    fareShare: (dis / totalPassengerDistance) * TotalFare
 };
 passengers.push(extra);
 
